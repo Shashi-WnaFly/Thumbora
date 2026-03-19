@@ -1,9 +1,16 @@
-import React from 'react'
+import React from "react";
+import HeroSection from "../sections/HeroSection";
+import TestimonialSection from "../sections/TestimonialSection";
+import PricingSection from "../sections/PricingSection";
 
 function HomePage() {
   return (
-    <div>HomePage</div>
-  )
+    <>
+      <HeroSection />
+      <TestimonialSection />
+      <PricingSection />
+    </>
+  );
 }
 
 export default HomePage;

@@ -5,10 +5,6 @@
     --font-poppins: "Poppins", sans-serif;
 }
 
-@theme {
-    --color-orange: #FF4400;
-}
-
 body {
     @apply bg-black text-white text-sm antialiased font-poppins;
 }
@@ -19,4 +15,22 @@ button {
   
 html {
   scroll-behavior: smooth;
+}
+
+.move-gradient {
+    background: linear-gradient(to right, #ff4400, #ff8800);
+    background-size: 200% auto;
+    animation: moveGradient 5s infinite;
+}
+
+@keyframes moveGradient{
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
 }

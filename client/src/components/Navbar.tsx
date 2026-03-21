@@ -9,7 +9,7 @@ export default function Navbar() {
   const navigate = useNavigate();
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
   return (
-    <div className=" h-18 w-full fixed z-30 flex justify-between items-center px-6 md:px-16 lg:px-24 xl:px-32 backdrop-blur">
+    <div className=" h-18 w-full fixed z-30 flex justify-between items-center px-6 md:px-16 lg:px-24 xl:px-32">
       <div className="flex items-center">
         <div
           className="w-10 h-10 p-2 cursor-pointer"

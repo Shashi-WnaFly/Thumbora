@@ -53,11 +53,14 @@ export default function HeroSections() {
       <div className="flex items-center gap-8 mt-12 text-slate-400">
         {specialFeatures.map((feature: string) => (
           <div className="flex gap-2 items-center" key={feature}>
-            <span className="text-orange-600 "><CheckIcon size={20} /></span>
+            <span className="text-orange-600 ">
+              <CheckIcon size={20} />
+            </span>
             <span key={feature}>{feature}</span>
           </div>
         ))}
       </div>
+
       <TiltImage />
     </div>
   );

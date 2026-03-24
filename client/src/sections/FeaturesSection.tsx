@@ -3,7 +3,7 @@ import SectionTitle from "../components/SectionTitle";
 import { features } from "../data/features";
 import type { IFeature } from "../types";
 
-export default function Feature() {
+export default function FeaturesSection() {
   return (
     <div className="px-4 md:px-16 lg:px-24 xl:px-32">
       <div className="w-full mt-16 flex flex-col justify-center items-center ">
@@ -60,7 +60,7 @@ export default function Feature() {
               Stop guessing and start creating thumbnails that actually grab
               attention.
             </p>
-            <button className="flex gap-2 justify-center items-center group py-2 pr-4 text-left">
+            <button className="flex gap-2 justify-center items-center group py-2 w-full text-center hover:bg-orange-500/20 hover:text-orange-500 transition duration-300 rounded-2xl">
               Start generating free{" "}
               <span className="-rotate-45 group-hover:rotate-0 transition duration-300">
                 <ArrowRight />

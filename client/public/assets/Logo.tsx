@@ -2,30 +2,6 @@ import React from "react";
 
 export default function Logo() {
   return (
-    // <svg
-    //   width="180"
-    //   height="180"
-    //   viewBox="0 0 180 180"
-    //   fill="none"
-    //   xmlns="http://www.w3.org/2000/svg"
-    // >
-    //   {/* <!-- Background circle --> */}
-    //   <circle cx="90" cy="90" r="80" fill="#F77F00" />
-
-    //   {/* <!-- Minimal thumb shape --> */}
-    //   <path
-    //     d="M75 110
-    //        C65 110, 65 95, 75 90
-    //        C85 85, 85 70, 95 65
-    //        C105 60, 115 70, 110 85
-    //        C105 100, 110 110, 95 115
-    //        C88 117, 80 115, 75 110 Z"
-    //     fill="#44A194"
-    //   />
-
-    //   {/* <!-- Simple accent dot --> */}
-    //   <circle cx="95" cy="85" r="4" fill="#0F172A" />
-    // </svg>
     <svg
       fill="#FF4400"
       version="1.1"

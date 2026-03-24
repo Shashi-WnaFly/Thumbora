@@ -1,5 +1,5 @@
 import { MenuIcon, XIcon } from "lucide-react";
-import Logo from "../assets/Logo";
+import Logo from "../../public/assets/Logo";
 import { navLinks } from "../data/navLinks";
 import type { INavLink } from "../types";
 import { Link, useNavigate } from "react-router-dom";

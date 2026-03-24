@@ -17,7 +17,7 @@ export default function TiltImage({ rotateAmplitude = 3 }) {
 
   const [lastY, setLastY] = useState(0);
 
-  function handleMouseMove(e: any) {
+  function handleMouseMove(e: React.MouseEvent<HTMLDivElement>) {
     if (!ref.current) return;
 
     const rect = ref.current.getBoundingClientRect();

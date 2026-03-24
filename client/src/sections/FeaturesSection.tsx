@@ -21,7 +21,7 @@ export default function FeaturesSection() {
               <div
                 className={` max-w-xs px-4 py-8 rounded-xl border border-slate-800 bg-slate-950 flex flex-col justify-start items-start gap-4`}
               >
-                <div>{feature.icon}</div>
+                <img src={feature.icon} alt={feature.title} />
                 <h3 className="font-semibold text-base">{feature.title}</h3>
                 <p className="text-slate-300">{feature.description}</p>
               </div>

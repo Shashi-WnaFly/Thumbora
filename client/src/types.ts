@@ -15,8 +15,21 @@ export interface IFeature {
   description: string;
 }
 
-export interface ISectionTitle {
+export interface SectionTitleProps {
   text1: string;
   text2: string;
   text3: string;
+}
+
+export interface ITestimonial {
+  name: string;
+  image: string;
+  handle: string;
+  date: string;
+  quote: string;
+}
+
+export interface TestimonialCardProps {
+  testimonial: ITestimonial;
+  index: number;
 }

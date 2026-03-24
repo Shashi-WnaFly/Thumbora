@@ -60,7 +60,7 @@ export default function TiltImage({ rotateAmplitude = 3 }) {
         style={{ rotateX, rotateY }}
       >
         <motion.img
-          src="/assets/hero-section-showcase.png"
+          src={"/assets/Excited_duo_promoting_design_tool.png"}
           className="w-full rounded-[15px] will-change-transform transform-[translateZ(0)]"
           alt="hero section showcase"
         />

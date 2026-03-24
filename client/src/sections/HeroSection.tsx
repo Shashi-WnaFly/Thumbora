@@ -1,5 +1,6 @@
 import { CheckIcon, ChevronRight, VideoIcon } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import TiltImage from "../components/TiltImage";
 
 export default function HeroSections() {
   const navigate = useNavigate();
@@ -57,6 +58,7 @@ export default function HeroSections() {
           </div>
         ))}
       </div>
+      <TiltImage />
     </div>
   );
 }

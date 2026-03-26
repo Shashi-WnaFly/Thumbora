@@ -1,36 +1,58 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
 @import "tailwindcss";
+@import "../node_modules/vanilla-infinite-marquee/infinite-marquee.css";
 
 @theme {
-    --font-poppins: "Poppins", sans-serif;
+  --font-poppins: "Poppins", sans-serif;
 }
 
 body {
-    @apply bg-black text-white text-sm antialiased font-poppins;
+  @apply bg-black text-white text-sm antialiased font-poppins;
 }
 
 button {
-    @apply cursor-pointer;
+  @apply cursor-pointer;
 }
-  
+
 html {
   scroll-behavior: smooth;
 }
 
 .move-gradient {
-    background: linear-gradient(to right, #ff4400, #ff8800);
-    background-size: 200% auto;
-    animation: moveGradient 5s infinite;
+  background: linear-gradient(to right, #ff4400, #ff8800);
+  background-size: 200% auto;
+  animation: moveGradient 5s infinite;
 }
 
-@keyframes moveGradient{
-    0% {
-        background-position: 0% 50%;
-    }
-    50% {
-        background-position: 100% 50%;
-    }
-    100% {
-        background-position: 0% 50%;
-    }
+@keyframes moveGradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.no-scrollbar::-webkit-scrollbar {
+    display: none;
+}
+
+.infinite-scroll-right{
+    animation: infiniteScroll 30s infinite linear reverse;
+}
+
+.infinite-scroll-left{
+    animation: infiniteScroll 30s infinite linear;
+}
+
+@keyframes infiniteScroll {
+  from {
+    translate: 0%;
+  }
+  to {
+    translate: -100%;
+  }
 }

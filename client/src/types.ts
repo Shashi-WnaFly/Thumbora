@@ -41,3 +41,13 @@ export interface IPricing {
   features: string[];
   mostPopular: boolean;
 }
+
+export interface ILink {
+  name: string;
+  href: string;
+}
+
+export interface IFooter {
+  title: string;
+  links: ILink[];
+}

@@ -4,6 +4,7 @@ import TestimonialSection from "../sections/TestimonialSection";
 import PricingSection from "../sections/PricingSection";
 import FeaturesSection from "../sections/FeaturesSection";
 import ContactSection from "../sections/ContactSection";
+import CTASection from "../sections/CTASection";
 
 function HomePage() {
   return (
@@ -13,6 +14,7 @@ function HomePage() {
       <TestimonialSection />
       <PricingSection />
       <ContactSection />
+      <CTASection />
     </>
   );
 }

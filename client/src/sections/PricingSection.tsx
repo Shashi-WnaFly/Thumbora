@@ -15,7 +15,7 @@ export default function PricingSection() {
 
       <div className="flex flex-wrap justify-center items-center mt-16 gap-10">
         {pricingData.map((pricing: IPricing) => (
-          <PricingCard {...pricing} />
+          <PricingCard key={pricing.price} {...pricing} />
         ))}
       </div>
     </div>

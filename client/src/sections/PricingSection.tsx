@@ -8,8 +8,8 @@ export default function PricingSection() {
   return (
     <div className="mt-16 flex flex-col justify-center items-center">
       <SectionTitle
-        text1={"Pricing"}
-        text2={"Simple Pricing"}
+        text1="Pricing"
+        text2="Simple Pricing"
         text3="Choose the plan that fits your creation schedule. Cancel anytime."
       />
 

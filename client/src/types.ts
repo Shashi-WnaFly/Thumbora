@@ -33,3 +33,11 @@ export interface TestimonialCardProps {
   testimonial: ITestimonial;
   index: number;
 }
+
+export interface IPricing {
+  name: string;
+  price: number;
+  period: string;
+  features: string[];
+  mostPopular: boolean;
+}

@@ -9,8 +9,8 @@ export default function FeaturesSection() {
       <div className="w-full mt-16 flex flex-col justify-center items-center ">
         <SectionTitle
           text1="Features"
-          text2="What you get"
-          text3="Components, patterns and pages - everything you need to ship"
+          text2="Why use our generator"
+          text3="Create stunning thumbnails that aged clicks, without the hassle"
         />
         <div className=" p-8 rounded-lg mt-8 flex flex-wrap justify-center md:justify-between items-center gap-6">
           {features.map((feature: IFeature, index: number) => (
@@ -60,7 +60,7 @@ export default function FeaturesSection() {
               Stop guessing and start creating thumbnails that actually grab
               attention.
             </p>
-            <button className="flex gap-2 justify-center items-center group py-2 w-full text-center hover:bg-orange-500/20 hover:text-orange-500 transition duration-300 rounded-2xl">
+            <button className="flex gap-2 justify-center items-center group py-2 w-full text-center hover:bg-orange-500/20 hover:text-orange-500 transition transiton duration-500 hover:rounded-full">
               Start generating free{" "}
               <span className="-rotate-45 group-hover:rotate-0 transition duration-300">
                 <ArrowRight />

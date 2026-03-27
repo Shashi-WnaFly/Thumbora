@@ -59,11 +59,13 @@ export default function TiltImage({ rotateAmplitude = 3 }) {
         className="relative transform w-full max-w-4xl overflow-hidden "
         style={{ rotateX, rotateY }}
       >
-        <motion.img
-          src={"/assets/Excited_duo_promoting_design_tool.png"}
-          className="w-full rounded-[15px] will-change-transform transform-[translateZ(0)] mt-16 border-2 border-slate-300 p-4"
-          alt="hero section showcase"
-        />
+        <motion.div className=" rounded-[15px] will-change-transform transform-[translateZ(0)] mt-16 border-2 border-slate-300 p-4">
+          <motion.img
+            src={"/assets/Excited_duo_promoting_design_tool.png"}
+            className="w-full rounded-[15px] "
+            alt="hero section showcase"
+          />
+        </motion.div>
         <div className="absolute top-0 left-0 h-full w-full bg-linear-0 from-black to-transparent"></div>
       </motion.div>
     </motion.figure>

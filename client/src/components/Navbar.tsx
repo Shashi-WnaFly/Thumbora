@@ -32,7 +32,7 @@ export default function Navbar() {
           </Link>
         ))}
       </div>
-      <button className="hidden md:block bg-orange-600 text-white px-4 py-2 rounded-full hover:bg-orange-700">
+      <button onClick={() => navigate("/login")} className="hidden md:block bg-orange-600 text-white px-4 py-2 rounded-full hover:bg-orange-700">
         Get Started
       </button>
       <button className="md:hidden" onClick={() => setIsMenuOpen(true)}>

@@ -1,4 +1,3 @@
-import React from 'react'
 import {motion} from 'motion/react'
 
 export default function CTASection() {
@@ -27,7 +26,7 @@ export default function CTASection() {
                     join thousands of creators using AI to boost their CTR.
                 </motion.p>
             </div>
-            <motion.button className="px-12 py-3 text-slate-800 bg-white hover:bg-slate-200 rounded-full text-sm mt-4"
+            <motion.button className="px-12 py-3 text-slate-800 bg-white hover:bg-slate-200 rounded-full text-sm mt-4 font-medium"
                 initial={{ y: 80, opacity: 0 }}
                 whileInView={{ y: 0, opacity: 1 }}
                 viewport={{ once: true }}

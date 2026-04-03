@@ -4,6 +4,7 @@ import { useParams } from "react-router-dom";
 import AspectRatioSelector from "../components/AspectRatioSelector";
 import type { AspectRatio, ThumbnailStyle } from "../data/dataAssets";
 import StyleSelector from "../components/StyleSelector";
+import ColorSchemeSelector from "../components/ColorSchemeSelector";
 
 const Generate = () => {
   const { id } = useParams<string>();
@@ -11,6 +12,7 @@ const Generate = () => {
   const [aspectRatio, setAspectRatio] = useState<AspectRatio>("16:9");
   const [style, setStyle] = useState<ThumbnailStyle>("Bold & Graphic");
   const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [colorScheme, setColorScheme] = useState<string>('vibrant');
   // const [additionalInfo, setAdditionalInfo] = useState<string>("");
 
   return (
@@ -52,6 +54,7 @@ const Generate = () => {
               {/* {StyleSelector} */}
               <StyleSelector value={style} onChange={setStyle} isOpen={isOpen} setIsOpen={setIsOpen} />
               {/* ColorSchemeSelector */}
+              <ColorSchemeSelector value={colorScheme} onChange={setColorScheme}/>
             </div>
           </div>
           {/* right panel */}

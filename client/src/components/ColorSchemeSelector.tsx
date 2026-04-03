@@ -29,7 +29,7 @@ const ColorSchemeSelector = ({
           </button>
         ))}
       </div>
-      <p>
+      <p className="text-sm text-zinc-400">
         Selected: {ColorSchemes.find((scheme) => scheme.id === value)?.name}
       </p>
     </div>

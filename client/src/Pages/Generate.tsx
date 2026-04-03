@@ -12,8 +12,9 @@ const Generate = () => {
   const [aspectRatio, setAspectRatio] = useState<AspectRatio>("16:9");
   const [style, setStyle] = useState<ThumbnailStyle>("Bold & Graphic");
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const [colorScheme, setColorScheme] = useState<string>('vibrant');
-  // const [additionalInfo, setAdditionalInfo] = useState<string>("");
+  const [colorScheme, setColorScheme] = useState<string>("vibrant");
+  const [additionalInfo, setAdditionalInfo] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(false);
 
   return (
     <div className="pt-19 min-h-screen">
@@ -27,7 +28,7 @@ const Generate = () => {
                 <h1 className=" text-zinc-100 font-semibold text-xl">
                   Generate Your Thumbnails
                 </h1>
-                <p className="text-zinc-400">
+                <p className="text-zinc-400 text-sm">
                   Describe your vision and let AI bring it to life
                 </p>
               </div>
@@ -50,11 +51,45 @@ const Generate = () => {
                 </span>
               </div>
               {/* AspactRatioSelector */}
-              <AspectRatioSelector value={aspectRatio} onChange={setAspectRatio} />
+              <AspectRatioSelector
+                value={aspectRatio}
+                onChange={setAspectRatio}
+              />
               {/* {StyleSelector} */}
-              <StyleSelector value={style} onChange={setStyle} isOpen={isOpen} setIsOpen={setIsOpen} />
+              <StyleSelector
+                value={style}
+                onChange={setStyle}
+                isOpen={isOpen}
+                setIsOpen={setIsOpen}
+              />
               {/* ColorSchemeSelector */}
-              <ColorSchemeSelector value={colorScheme} onChange={setColorScheme}/>
+              <ColorSchemeSelector
+                value={colorScheme}
+                onChange={setColorScheme}
+              />
+              <div>
+                <label className="text-sm text-zinc-200">
+                  Additional Details{" "}
+                  <span className="text-zinc-400">(optional)</span>
+                </label>
+                <textarea
+                  id="additionalInfo"
+                  rows={3}
+                  value={additionalInfo}
+                  onChange={(e) => setAdditionalInfo(e.target.value)}
+                  className="block w-full rounded-lg outline-0 border border-zinc-600 resize-none shadow-sm focus:ring-2 focus:ring-orange-700 p-2 sm:text-sm bg-transparent text-zinc-300 mt-1"
+                  placeholder="e.g., 'Include a steaming coffee cup and beans in the background'"
+                ></textarea>
+              </div>
+              {!id && (
+                <button
+                  className="w-full text-[15px] py-3.5 rounded-xl font-medium bg-linear-to-b from-orange-500 to-orange-600 hover:from-orange-700 disabled:cursor-not-allowed transition-colors"
+                  onClick={() => setLoading(true)}
+                  disabled={loading}
+                >
+                  {loading ? "Generating..." : "Generate Thumbnails"}
+                </button>
+              )}
             </div>
           </div>
           {/* right panel */}

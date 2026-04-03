@@ -20,7 +20,7 @@ const Generate = () => {
         <div className="grid lg:grid-cols-[400px_1fr] gap-8">
           {/* left panel */}
           <div className={`${id && "pointer-events-none"} space-y-6`}>
-            <div className="bg-white/8 border-white/12 rounded-2xl p-6 mb-6 space-y-6">
+            <div className="bg-white/8 border-white/12 rounded-2xl p-6 space-y-2">
               <div>
                 <h1 className=" text-zinc-100 font-semibold text-xl">
                   Generate Your Thumbnails

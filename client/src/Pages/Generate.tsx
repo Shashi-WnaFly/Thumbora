@@ -2,13 +2,16 @@ import React, { useState } from "react";
 import SoftBackdrop from "../components/SoftBackdrop";
 import { useParams } from "react-router-dom";
 import AspectRatioSelector from "../components/AspectRatioSelector";
-import type { AspectRatio } from "../data/dataAssets";
+import type { AspectRatio, ThumbnailStyle } from "../data/dataAssets";
+import StyleSelector from "../components/StyleSelector";
 
 const Generate = () => {
   const { id } = useParams<string>();
   const [title, setTitle] = useState<string>("");
   const [aspectRatio, setAspectRatio] = useState<AspectRatio>("16:9");
-  const [additionalInfo, setAdditionalInfo] = useState<string>("");
+  const [style, setStyle] = useState<ThumbnailStyle>("Bold & Graphic");
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+  // const [additionalInfo, setAdditionalInfo] = useState<string>("");
 
   return (
     <div className="pt-19 min-h-screen">
@@ -47,6 +50,7 @@ const Generate = () => {
               {/* AspactRatioSelector */}
               <AspectRatioSelector value={aspectRatio} onChange={setAspectRatio} />
               {/* {StyleSelector} */}
+              <StyleSelector value={style} onChange={setStyle} isOpen={isOpen} setIsOpen={setIsOpen} />
               {/* ColorSchemeSelector */}
             </div>
           </div>

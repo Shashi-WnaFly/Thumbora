@@ -2,19 +2,21 @@ import React, { useState } from "react";
 import SoftBackdrop from "../components/SoftBackdrop";
 import { useParams } from "react-router-dom";
 import AspectRatioSelector from "../components/AspectRatioSelector";
-import type { AspectRatio, ThumbnailStyle } from "../data/dataAssets";
+import type { AspectRatio, ThumbnailStyle, IThumbnail } from "../data/dataAssets";
 import StyleSelector from "../components/StyleSelector";
 import ColorSchemeSelector from "../components/ColorSchemeSelector";
+import PreviewPanel from "../components/PreviewPanel";
 
 const Generate = () => {
   const { id } = useParams<string>();
   const [title, setTitle] = useState<string>("");
   const [aspectRatio, setAspectRatio] = useState<AspectRatio>("16:9");
   const [style, setStyle] = useState<ThumbnailStyle>("Bold & Graphic");
-  const [isOpen, setIsOpen] = useState<boolean>(false);
   const [colorScheme, setColorScheme] = useState<string>("vibrant");
+  const [isOpen, setIsOpen] = useState<boolean>(false);
   const [additionalInfo, setAdditionalInfo] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
+  const [thumbnail, setThumbnail] = useState<IThumbnail>(null);
 
   return (
     <div className="pt-19 min-h-screen">
@@ -93,7 +95,9 @@ const Generate = () => {
             </div>
           </div>
           {/* right panel */}
-          <div></div>
+          <div>
+            <PreviewPanel thumbnail={thumbnail} isLoading={loading} aspectRatio={aspectRatio} />
+          </div>
         </div>
       </main>
     </div>

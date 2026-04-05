@@ -12,11 +12,8 @@ export default function Navbar() {
     <div
       className={` h-18 w-full top-0 fixed z-30 flex justify-between items-center px-6 md:px-16 lg:px-24 xl:px-32 ${!isMenuOpen && "backdrop-blur"}`}
     >
-      <div className="flex items-center">
-        <div
-          className="w-10 h-10 p-2 cursor-pointer"
-          onClick={() => navigate("/")}
-        >
+      <div onClick={() => navigate("/")} className="flex items-center cursor-pointer">
+        <div className="w-10 h-10 p-2">
           <Logo />
         </div>
         <h3 className="text-2xl font-semibold">Thumbora</h3>
@@ -32,7 +29,10 @@ export default function Navbar() {
           </Link>
         ))}
       </div>
-      <button onClick={() => navigate("/login")} className="hidden md:block bg-orange-600 text-white px-4 py-2 rounded-full hover:bg-orange-700">
+      <button
+        onClick={() => navigate("/login")}
+        className="hidden md:block bg-orange-600 text-white px-4 py-2 rounded-full hover:bg-orange-700"
+      >
         Get Started
       </button>
       <button className="md:hidden" onClick={() => setIsMenuOpen(true)}>

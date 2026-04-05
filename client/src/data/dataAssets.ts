@@ -28,4 +28,21 @@ export const ColorSchemes = [
   { id: "neon", name: "Neon", colors: ["#FF00FF", "#00FFFF", "#FFFF00"] },
   { id: "pastel", name: "Pastel", colors: ["#FFB5A7", "#FCD5CE", "#F8EDEB"] },
 ] as const;
-export type ColorScheme = (typeof colorSchemes)[number];
+export type ColorScheme = (typeof ColorSchemes)[number];
+
+export interface IThumbnail {
+    _id: string;
+    userId: string;
+    title: string;
+    description?: string;
+    style: "Bold & Graphic" | "Tech/Futuristic" | "Minimalist" | "Photorealistic" | "Illustrated";
+    aspect_ratio?: "16:9" | "1:1" | "9:16";
+    color_scheme?: "vibrant" | "sunset" | "forest" | "neon" | "purple" | "monochrome" | "ocean" | "pastel";
+    text_overlay?: boolean;
+    image_url?: string;
+    prompt_used?: string;
+    user_prompt?: string;
+    isGenerating?: boolean;
+    createdAt?: Date;
+    updatedAt?: Date;
+}

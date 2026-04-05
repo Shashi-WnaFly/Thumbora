@@ -30,11 +30,11 @@ const StyleSelector = ({
   };
 
   const styleIcons: Record<ThumbnailStyle, React.ReactNode> = {
-    "Bold & Graphic": <LuSparkle w-14 h-14 />,
-    Minimalistic: <LuSquare w-14 h-14 />,
-    Realistic: <LuImage w-14 h-14 />,
-    Illustrated: <LuPenTool w-14 h-14 />,
-    "Tech/Futuristic": <LuCpu w-14 h-14 />,
+    "Bold & Graphic": <LuSparkle className="w-5 h-5 text-orange-500" />,
+    Minimalistic: <LuSquare className="w-5 h-5 text-orange-500" />,
+    Realistic: <LuImage className="w-5 h-5 text-orange-500" />,
+    Illustrated: <LuPenTool className="w-5 h-5 text-orange-500" />,
+    "Tech/Futuristic": <LuCpu className="w-5 h-5 text-orange-500" />,
   };
 
   return (

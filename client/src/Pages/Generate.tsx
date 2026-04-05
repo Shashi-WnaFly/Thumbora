@@ -2,7 +2,11 @@ import React, { useState } from "react";
 import SoftBackdrop from "../components/SoftBackdrop";
 import { useParams } from "react-router-dom";
 import AspectRatioSelector from "../components/AspectRatioSelector";
-import type { AspectRatio, ThumbnailStyle, IThumbnail } from "../data/dataAssets";
+import type {
+  AspectRatio,
+  ThumbnailStyle,
+  IThumbnail,
+} from "../data/dataAssets";
 import StyleSelector from "../components/StyleSelector";
 import ColorSchemeSelector from "../components/ColorSchemeSelector";
 import PreviewPanel from "../components/PreviewPanel";
@@ -16,12 +20,12 @@ const Generate = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [additionalInfo, setAdditionalInfo] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
-  const [thumbnail, setThumbnail] = useState<IThumbnail>(null);
+  const [thumbnail, setThumbnail] = useState<IThumbnail | null>(null);
 
   return (
     <div className="pt-19 min-h-screen">
       <SoftBackdrop />
-      <main className="max-w-6xl mx-auto px-4 md:px-8 lg:px-24 xl:px-32">
+      <main className="pt-16 max-w-7xl mx-auto px-4 md:px-8 lg:px-24 xl:px-32">
         <div className="grid lg:grid-cols-[400px_1fr] gap-8">
           {/* left panel */}
           <div className={`${id && "pointer-events-none"} space-y-6`}>
@@ -96,7 +100,14 @@ const Generate = () => {
           </div>
           {/* right panel */}
           <div>
-            <PreviewPanel thumbnail={thumbnail} isLoading={loading} aspectRatio={aspectRatio} />
+            <div className="p-6 rounded-2xl bg-white/8 border border-white/10 shadow-xl">
+              <h2 className="text-lg font-semibold text-zinc-100">Preview</h2>
+              <PreviewPanel
+                thumbnail={thumbnail}
+                isLoading={loading}
+                aspectRatio={aspectRatio}
+              />
+            </div>
           </div>
         </div>
       </main>

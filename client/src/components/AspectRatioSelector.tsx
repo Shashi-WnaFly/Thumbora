@@ -3,9 +3,9 @@ import { AspectRatios, type AspectRatio } from "../data/dataAssets";
 import { RiRectangleLine, RiSquareLine } from "react-icons/ri";
 
 const ratioIcons = {
-  "16:9": <RiRectangleLine size={24} />,
-  "1:1": <RiSquareLine size={24} />,
-  "9:16": <RiRectangleLine size={24} style={{ transform: "rotate(90deg)" }} />,
+  "16:9": <RiRectangleLine className="size-6" />,
+  "1:1": <RiSquareLine className="size-6" />,
+  "9:16": <RiRectangleLine className="size-6" style={{ transform: "rotate(90deg)" }} />,
 } as Record<AspectRatio, React.ReactNode>;
 
 const AspectRatioSelector = ({

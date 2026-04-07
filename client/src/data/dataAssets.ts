@@ -1,7 +1,7 @@
 import img_1 from "../../public/assets/Excited_duo_promoting_design_tool.png";
 
 export const AspectRatios = ["16:9", "1:1", "9:16"] as const;
-export type AspectRatio = (typeof AspectRatios)[number];
+export type IAspectRatio = (typeof AspectRatios)[number];
 
 export const ThumbnailStyles = [
   "Bold & Graphic",
@@ -10,7 +10,7 @@ export const ThumbnailStyles = [
   "Illustrated",
   "Tech/Futuristic",
 ] as const;
-export type ThumbnailStyle = (typeof ThumbnailStyles)[number];
+export type IThumbnailStyle = (typeof ThumbnailStyles)[number];
 
 export const ColorSchemes = [
   { id: "vibrant", name: "Vibrant", colors: ["#FF6B6B", "#4ECDC4", "#45B7D1"] },
@@ -30,7 +30,7 @@ export const ColorSchemes = [
   { id: "neon", name: "Neon", colors: ["#FF00FF", "#00FFFF", "#FFFF00"] },
   { id: "pastel", name: "Pastel", colors: ["#FFB5A7", "#FCD5CE", "#F8EDEB"] },
 ] as const;
-export type ColorScheme = (typeof ColorSchemes)[number];
+export type IColorScheme = (typeof ColorSchemes)[number];
 
 export interface IThumbnail {
   _id: string;

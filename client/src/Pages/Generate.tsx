@@ -3,8 +3,8 @@ import SoftBackdrop from "../components/SoftBackdrop";
 import { useParams } from "react-router-dom";
 import AspectRatioSelector from "../components/AspectRatioSelector";
 import type {
-  AspectRatio,
-  ThumbnailStyle,
+  IAspectRatio,
+  IThumbnailStyle,
   IThumbnail,
 } from "../data/dataAssets";
 import StyleSelector from "../components/StyleSelector";
@@ -14,8 +14,8 @@ import PreviewPanel from "../components/PreviewPanel";
 const Generate = () => {
   const { id } = useParams<string>();
   const [title, setTitle] = useState<string>("");
-  const [aspectRatio, setAspectRatio] = useState<AspectRatio>("16:9");
-  const [style, setStyle] = useState<ThumbnailStyle>("Bold & Graphic");
+  const [aspectRatio, setAspectRatio] = useState<IAspectRatio>("16:9");
+  const [style, setStyle] = useState<IThumbnailStyle>("Bold & Graphic");
   const [colorScheme, setColorScheme] = useState<string>("vibrant");
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [additionalInfo, setAdditionalInfo] = useState<string>("");

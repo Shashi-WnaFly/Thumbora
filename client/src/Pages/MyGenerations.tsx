@@ -1,8 +1,14 @@
 import React, { useState } from "react";
 import SoftBackdrop from "../components/SoftBackdrop";
-import type { IThumbnail } from "../data/dataAssets";
+import type { IAspectRatio, IThumbnail } from "../data/dataAssets";
 
 const MyGenerations = () => {
+
+  const AspectRatioClass : Record<IAspectRatio, string> = {
+    "16:9": "aspect-video",
+    "1:1": "aspect-square",
+    "9:16": "aspect-[9/16]",
+  }
   const [thumbnails, setThumbnails] = useState<IThumbnail[]>([]);
   const [loading, setLoading] = useState(false);
 
@@ -37,7 +43,12 @@ const MyGenerations = () => {
             </p>
           </div>
         )}
-        
+
+        {!loading && thumbnails.length > 0 && (
+          <div className=" mt-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {/* {thumbnails.map((thumb) => (<ThumbnailCard key={thumb.id} thumbnail={thumb} />))} */}
+          </div>
+        )}
       </div>
     </>
   );

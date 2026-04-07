@@ -1,9 +1,9 @@
 import {
-  DribbbleIcon,
-  LinkedinIcon,
-  TwitterIcon,
-  YoutubeIcon,
-} from "lucide-react";
+  FaDribbble,
+  FaLinkedin,
+  FaTwitter,
+  FaYoutube,
+} from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { motion } from "motion/react";
 import { footerData } from "../data/footer";
@@ -55,16 +55,16 @@ export default function Footer() {
         </p>
         <div className="flex items-center gap-4 mt-3">
           <Link to="#Dribble" target="_blank" rel="noreferrer">
-            <DribbbleIcon className="size-5 hover:text-orange-500" />
+            <FaDribbble className="size-5 hover:text-orange-500" />
           </Link>
           <Link to="#LinkedIn" target="_blank" rel="noreferrer">
-            <LinkedinIcon className="size-5 hover:text-orange-500" />
+            <FaLinkedin className="size-5 hover:text-orange-500" />
           </Link>
           <Link to="#Twitter" target="_blank" rel="noreferrer">
-            <TwitterIcon className="size-5 hover:text-orange-500" />
+            <FaTwitter className="size-5 hover:text-orange-500" />
           </Link>
           <Link to="#Youtube" target="_blank" rel="noreferrer">
-            <YoutubeIcon className="size-6 hover:text-orange-500" />
+            <FaYoutube className="size-6 hover:text-orange-500" />
           </Link>
         </div>
         <p className="mt-3 text-center">

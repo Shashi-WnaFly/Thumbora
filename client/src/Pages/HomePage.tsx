@@ -15,7 +15,6 @@ function HomePage() {
       <PricingSection />
       <ContactSection />
       <CTASection />
-      <Footer />
     </>
   );
 }

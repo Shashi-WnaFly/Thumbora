@@ -62,19 +62,21 @@ export interface IThumbnail {
   updatedAt?: Date;
 }
 
-export const demoThumbnail = {
-  _id: "69451d5bc9ea67e4c930f698",
-  userId: "6942b3bd2a93a220baa331b3",
-  title: "Learn How to make 100k in 10 days",
-  style: "Bold & Graphic",
-  aspect_ratio: "16:9",
-  color_scheme: "vibrant",
-  text_overlay: true,
-  image_url: img_1,
-  prompt_used: "add cash images graph and etc",
-  user_prompt: "add cash images graph and etc",
-  isGenerating: false,
-  createdAt: "2025-12-19T09:39:39.971Z",
-  updatedAt: "2025-12-19T09:40:05.084Z",
-  __v: 0,
-};
+export const demoThumbnail = [
+  {
+    _id: "69451d5bc9ea67e4c930f698",
+    userId: "6942b3bd2a93a220baa331b3",
+    title: "Learn How to make 100k in 10 days",
+    style: "Bold & Graphic",
+    aspect_ratio: "16:9",
+    color_scheme: "vibrant",
+    text_overlay: true,
+    image_url: img_1,
+    prompt_used: "add cash images graph and etc",
+    user_prompt: "add cash images graph and etc",
+    isGenerating: false,
+    createdAt: "2025-12-19T09:39:39.971Z",
+    updatedAt: "2025-12-19T09:40:05.084Z",
+    _v: 0,
+  },
+];

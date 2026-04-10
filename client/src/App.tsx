@@ -5,6 +5,7 @@ import HomePage from "./Pages/HomePage";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Login from "./Pages/Login";
 import MyGenerations from "./Pages/MyGenerations";
+import YTPreview from "./Pages/YTPreview";
 
 const router = createBrowserRouter([
   {
@@ -26,6 +27,10 @@ const router = createBrowserRouter([
       {
         path: "/my-generations",
         element: <MyGenerations />,
+      },
+      {
+        path: "/yt-preview",
+        element: <YTPreview />,
       },
     ],
   },

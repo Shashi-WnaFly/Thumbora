@@ -21,7 +21,7 @@ const MyGenerations = () => {
     setLoading(true);
     setThumbnails(demoThumbnail);
     setLoading(false);
-  }
+  };
 
   useEffect(() => {
     fetchThumbnails();
@@ -64,11 +64,16 @@ const MyGenerations = () => {
         {!loading && thumbnails.length > 0 && (
           <div className=" grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {thumbnails.map((thumb) => (
-              <ThumbnailCard
+              <div
                 key={thumb._id}
-                thumbnail={thumb}
-                aspectRatio={AspectRatioClass[thumb.aspect_ratio]}
-              />
+                onClick={() => navigate(`/generate/${thumb._id}`)}
+                className="cursor-pointer"
+              >
+                <ThumbnailCard
+                  thumbnail={thumb}
+                  aspectRatio={AspectRatioClass[thumb.aspect_ratio]}
+                />
+              </div>
             ))}
           </div>
         )}

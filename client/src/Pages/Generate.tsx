@@ -26,19 +26,21 @@ const Generate = () => {
   const fetchThumbnail = async (thumbId: string) => {
     setLoading(true);
     // Simulate API call to fetch thumbnail by ID
-    const thmbnail = demoThumbnail.find((thumb) => thumb._id === thumbId) || null;
-    setThumbnail(thmbnail);
-    setTitle(thmbnail?.title || "");
-    setAspectRatio(thmbnail?.aspect_ratio as IAspectRatio || "16:9");
-    setStyle(thmbnail?.style as IThumbnailStyle || "Bold & Graphic");
-    setColorScheme(thmbnail?.color_scheme || "vibrant");
-    setAdditionalInfo(thmbnail?.user_prompt || "");
-    setLoading(false);
+    setTimeout(() => {
+      const thmbnail =
+        demoThumbnail.find((thumb) => thumb._id === thumbId) || null;
+      setThumbnail(thmbnail);
+      setTitle(thmbnail?.title || "");
+      setAspectRatio((thmbnail?.aspect_ratio as IAspectRatio) || "16:9");
+      setStyle((thmbnail?.style as IThumbnailStyle) || "Bold & Graphic");
+      setColorScheme(thmbnail?.color_scheme || "vibrant");
+      setAdditionalInfo(thmbnail?.user_prompt || "");
+      setLoading(false);
+    }, 3000);
   };
 
-
   useEffect(() => {
-    if(thumbId){
+    if (thumbId) {
       fetchThumbnail(thumbId);
     }
   }, [thumbId]);

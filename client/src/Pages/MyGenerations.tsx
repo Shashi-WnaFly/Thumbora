@@ -1,21 +1,31 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import SoftBackdrop from "../components/SoftBackdrop";
 import type { IAspectRatio, IThumbnail } from "../data/dataAssets";
 import ThumbnailCard from "../components/ThumbnailCard";
-import { demoThumbnail as thumbnails} from "../data/dataAssets";
+import { demoThumbnail } from "../data/dataAssets";
+import { useNavigate } from "react-router-dom";
 
 const MyGenerations = () => {
+  const navigate = useNavigate();
 
-  const AspectRatioClass : Record<IAspectRatio, string> = {
+  const AspectRatioClass: Record<IAspectRatio, string> = {
     "16:9": "aspect-video",
     "1:1": "aspect-square",
     "9:16": "aspect-[9/16]",
-  }
+  };
 
-  // const [thumbnails, setThumbnails] = useState([]);
+  const [thumbnails, setThumbnails] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  // setThumbnails(demoThumbnail);
+  const fetchThumbnails = async () => {
+    setLoading(true);
+    setThumbnails(demoThumbnail);
+    setLoading(false);
+  }
+
+  useEffect(() => {
+    fetchThumbnails();
+  }, []);
 
   return (
     <>
@@ -41,7 +51,9 @@ const MyGenerations = () => {
 
         {!loading && thumbnails.length < 1 && (
           <div className="mt-12 flex flex-col items-center gap-4">
-            <h3 className="font-bold text-zinc-200 text-lg">No thumbnails yet</h3>
+            <h3 className="font-bold text-zinc-200 text-lg">
+              No thumbnails yet
+            </h3>
             <p className="text-zinc-400 text-sm mt-2">
               You haven't generated any thumbnails yet. Start creating to see
               them here.
@@ -51,7 +63,13 @@ const MyGenerations = () => {
 
         {!loading && thumbnails.length > 0 && (
           <div className=" grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {thumbnails?.map((thumb) => (<ThumbnailCard key={thumb?.id} thumbnail={thumb} aspectRatio={AspectRatioClass[thumb?.aspect_ratio]}   />))}
+            {thumbnails.map((thumb) => (
+              <ThumbnailCard
+                key={thumb._id}
+                thumbnail={thumb}
+                aspectRatio={AspectRatioClass[thumb.aspect_ratio]}
+              />
+            ))}
           </div>
         )}
       </div>

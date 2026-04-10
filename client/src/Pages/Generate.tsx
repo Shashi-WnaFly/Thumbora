@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import SoftBackdrop from "../components/SoftBackdrop";
 import { useParams } from "react-router-dom";
 import AspectRatioSelector from "../components/AspectRatioSelector";
+import { demoThumbnail } from "../data/dataAssets";
 import type {
   IAspectRatio,
   IThumbnailStyle,
@@ -12,7 +13,7 @@ import ColorSchemeSelector from "../components/ColorSchemeSelector";
 import PreviewPanel from "../components/PreviewPanel";
 
 const Generate = () => {
-  const { id } = useParams<string>();
+  const { thumbId } = useParams<string>();
   const [title, setTitle] = useState<string>("");
   const [aspectRatio, setAspectRatio] = useState<IAspectRatio>("16:9");
   const [style, setStyle] = useState<IThumbnailStyle>("Bold & Graphic");
@@ -22,13 +23,33 @@ const Generate = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [thumbnail, setThumbnail] = useState<IThumbnail | null>(null);
 
+  const fetchThumbnail = async (thumbId: string) => {
+    setLoading(true);
+    // Simulate API call to fetch thumbnail by ID
+    const thmbnail = demoThumbnail.find((thumb) => thumb._id === thumbId) || null;
+    setThumbnail(thmbnail);
+    setTitle(thmbnail?.title || "");
+    setAspectRatio(thmbnail?.aspect_ratio as IAspectRatio || "16:9");
+    setStyle(thmbnail?.style as IThumbnailStyle || "Bold & Graphic");
+    setColorScheme(thmbnail?.color_scheme || "vibrant");
+    setAdditionalInfo(thmbnail?.user_prompt || "");
+    setLoading(false);
+  };
+
+
+  useEffect(() => {
+    if(thumbId){
+      fetchThumbnail(thumbId);
+    }
+  }, [thumbId]);
+
   return (
     <div className="pt-19 min-h-screen">
       <SoftBackdrop />
       <main className="pt-16 max-w-7xl mx-auto px-4 md:px-8 lg:px-24 xl:px-32">
         <div className="grid lg:grid-cols-[400px_1fr] gap-8">
           {/* left panel */}
-          <div className={`${id && "pointer-events-none"} space-y-6`}>
+          <div className={`${thumbId && "pointer-events-none"} space-y-6`}>
             <div className="bg-white/8 border-white/12 rounded-2xl p-6 space-y-2">
               <div>
                 <h1 className=" text-zinc-100 font-semibold text-xl">
@@ -87,7 +108,7 @@ const Generate = () => {
                   placeholder="e.g., 'Include a steaming coffee cup and beans in the background'"
                 ></textarea>
               </div>
-              {!id && (
+              {!thumbId && (
                 <button
                   className="w-full text-[15px] py-3.5 rounded-xl font-medium bg-linear-to-b from-orange-500 to-orange-600 hover:from-orange-700 disabled:cursor-not-allowed transition-colors"
                   onClick={() => setLoading(true)}

@@ -20,7 +20,7 @@ const router = createBrowserRouter([
         element: <Login />,
       },
       {
-        path: "/generate",
+        path: "/generate/:thumbId?",
         element: <Generate />,
       },
       {

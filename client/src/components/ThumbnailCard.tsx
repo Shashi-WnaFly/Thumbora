@@ -1,10 +1,11 @@
 import React from 'react'
 import type { IThumbnail } from '../data/dataAssets'
+import { useNavigate } from 'react-router';
 
 const ThumbnailCard = ({ thumbnail, aspectRatio } : {thumbnail: IThumbnail, aspectRatio: string}) => {
-  
+  const navigate = useNavigate();
   return (
-    <div className='rounded-2xl bg-white/6 cursor-pointer flex flex-col gap-2 overflow-hidden group-hover:shadow-lg transition-shadow duration-300'>
+    <div onClick={() => navigate(`/generate/${thumbnail._id}`)} className='rounded-2xl bg-white/6 cursor-pointer flex flex-col gap-2 overflow-hidden group-hover:shadow-lg transition-shadow duration-300'>
         <div className={`w-full h-full ${aspectRatio} overflow-hidden rounded-t-2xl`}>
           <img className='object-cover rounded-t-2xl' src={thumbnail.image_url} alt={thumbnail.title} /> 
         </div>

@@ -29,7 +29,7 @@ const router = createBrowserRouter([
         element: <MyGenerations />,
       },
       {
-        path: "/yt-preview",
+        path: "/preview",
         element: <YTPreview />,
       },
     ],

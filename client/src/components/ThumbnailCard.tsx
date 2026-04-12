@@ -1,6 +1,7 @@
 import { FaDownload, FaTrash } from "react-icons/fa";
 import type { IThumbnail } from "../data/dataAssets";
 import { FaArrowUpRightFromSquare } from "react-icons/fa6";
+import { Link, useNavigate } from "react-router-dom";
 
 const ThumbnailCard = ({
   thumbnail,
@@ -9,6 +10,15 @@ const ThumbnailCard = ({
   thumbnail: IThumbnail;
   aspectRatio: string;
 }) => {
+  const handleDelete = (id: string) => {
+    // Implement delete functionality here
+    console.log("Delete thumbnail with ID:", id);
+  };
+
+  const handleDownload = (image_url: string) => {
+    window.open(image_url, "_blank");
+  };
+
   return (
     <div className="group rounded-2xl bg-white/6 cursor-pointer flex flex-col gap-2 overflow-hidden hover:shadow-lg hover:shadow-orange-600 transition-shadow duration-300">
       <div
@@ -39,16 +49,22 @@ const ThumbnailCard = ({
           <p className="text-nowrap text-ellipsis overflow-hidden text-xs line-clamp-2 text-zinc-400 ">
             {new Date(thumbnail.createdAt!).toDateString()}
           </p>
-          <div className=" text-sm gap-4 group-hover:flex hidden">
-            <button>
+          <div
+            onClick={(e) => e.stopPropagation()}
+            className=" text-sm gap-4 group-hover:flex hidden"
+          >
+            <button onClick={() => handleDelete(thumbnail._id)}>
               <FaTrash className="text-white hover:text-orange-600" />
             </button>
-            <button>
+            <button onClick={() => handleDownload(thumbnail.image_url!)}>
               <FaDownload className="text-white hover:text-orange-600" />
             </button>
-            <button>
+            <Link
+              target="_blank"
+              to={`/preview?title=${thumbnail.title}&thumbnail_url=${thumbnail.image_url}`}
+            >
               <FaArrowUpRightFromSquare className="text-white hover:text-orange-600" />
-            </button>
+            </Link>
           </div>
         </div>
       </div>

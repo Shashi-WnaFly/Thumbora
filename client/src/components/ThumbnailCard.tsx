@@ -51,7 +51,7 @@ const ThumbnailCard = ({
           </p>
           <div
             onClick={(e) => e.stopPropagation()}
-            className=" text-sm gap-4 group-hover:flex hidden"
+            className=" text-sm gap-2 group-hover:flex sm:hidden max-sm:flex"
           >
             <button onClick={() => handleDelete(thumbnail._id)}>
               <FaTrash className="text-white hover:text-orange-600" />

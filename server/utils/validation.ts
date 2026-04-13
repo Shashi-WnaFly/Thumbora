@@ -9,7 +9,7 @@ const signUpValidation = (req: any) => {
   if (
     !userName ||
     userName.length < 3 ||
-    userName.length > 20 ||
+    userName.length > 30 ||
     userName.split(" ").length > 3
   )
     throw new Error("Username is invalid!");

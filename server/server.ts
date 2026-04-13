@@ -10,9 +10,13 @@ app.use(cors());
 app.use(cookieParser());
 app.use(express.json());
 
-app.use("/", (req: Request, res: Response) => {
-    res.send("Server is Live!");
-});
+import authRoutes from "./routes/auth.ts";
+
+app.use("/", authRoutes);
+
+// app.use("/signup", (req: Request, res: Response) => {
+//     res.send("Server is Live!");
+// });
 
 const PORT = process.env.PORT || 5000;
 

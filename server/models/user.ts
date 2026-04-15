@@ -1,7 +1,8 @@
 import mongoose, { Schema } from "mongoose";
 import validator from "validator";
+import { IUser } from "../types";
 
-const userSchema = new Schema(
+const userSchema = new Schema<IUser>(
   {
     userName: {
       type: String,
@@ -67,4 +68,6 @@ const userSchema = new Schema(
   { timestamps: true },
 );
 
-export default new mongoose.Model("User", userSchema);
+const User = mongoose.models.User || mongoose.model<IUser>("User", userSchema)
+
+export default User;

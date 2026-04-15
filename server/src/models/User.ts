@@ -46,7 +46,7 @@ const userSchema = new Schema<IUser>(
       default: null,
       trim: true,
       minLength: 6,
-      maxLength: 6
+      maxLength: 6,
     },
     otpExpireAt: {
       type: Date,

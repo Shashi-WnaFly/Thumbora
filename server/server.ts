@@ -1,7 +1,8 @@
 import "dotenv/config";
-import express, { Request, Response } from "express";
+import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
+import connectDB from "./src/config/database.ts"
 
 const app = express();
 
@@ -12,12 +13,16 @@ app.use(cors({
 app.use(cookieParser());
 app.use(express.json());
 
-import authRoutes from "./routes/auth.ts";
+import authRoutes from "./src/routes/auth.ts";
 
 app.use("/", authRoutes);
 
 const PORT = process.env.PORT || 5000;
 
-app.listen(PORT, () => {
-    console.log(`Server is running on http://localhost:${PORT}`);
-});
+connectDB().then(() => {
+    console.log("database is successfully connected.");
+    app.listen(PORT, () => {
+        console.log(`Server is running on http://localhost:${PORT}`);
+    });
+
+})

@@ -12,4 +12,13 @@ export interface IUser extends Document {
   updatedAt?: Date;
 }
 
+export interface ISafeUser extends Document {
+  userName: string;
+  emailId: string;
+  age?: number;
+  gender?: IGender;
+  isVerified?: boolean;
+  avatarUrl?: string;
+}
+
 export type IGender = "male" | "female" | "other";

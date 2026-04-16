@@ -2,8 +2,11 @@ import express, { Request, Response } from "express";
 import { signUpValidation } from "../utils/validation.js";
 import validator from "validator";
 import User from "../models/User.js";
-const router = express.Router();
 import bcrypt from "bcrypt";
+import { userAuth } from "../middleware/auth.js";
+import { ISafeUser } from "../types/types.js";
+
+const router = express.Router();
 
 router.post("/signup", async (req: Request, res: Response) => {
   try {
@@ -56,9 +59,21 @@ router.post("/login", async (req: Request, res: Response) => {
 
     const token = await loggedUser.getJWT();
 
-    res.cookie("token", token, {expires: new Date(Date.now() + 60 * 60 * 24)});
+    res.cookie("token", token, {
+      expires: new Date(Date.now() + 60 * 60 * 24),
+    });
+    res.json({ success: true, message: "Logged in successfully" });
   } catch (error) {
     res.json({ success: false, message: (error as Error).message });
+  }
+});
+
+router.get("/profile", userAuth, (req: Request, res: Response) => {
+  try {
+    const user: ISafeUser = req.user;
+    res.json({ success: true, data: user });
+  } catch (error) {
+    res.send(401).json({ success: false, message: (error as Error).message });
   }
 });
 

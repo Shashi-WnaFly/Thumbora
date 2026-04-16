@@ -2,9 +2,7 @@ import express, { NextFunction, Request, Response } from "express";
 import User from "../models/User.js";
 import jwt, { JwtPayload } from "jsonwebtoken";
 
-const router = express.Router();
-
-router.use("/", async (req: Request, res: Response, next: NextFunction) => {
+const userAuth = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { token } = req.cookies;
 
@@ -22,4 +20,6 @@ router.use("/", async (req: Request, res: Response, next: NextFunction) => {
   } catch (error) {
     res.status(401).json({ success: false, message: (error as Error).message });
   }
-});
+};
+
+export { userAuth };

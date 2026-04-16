@@ -1,6 +1,6 @@
 import mongoose, { Schema } from "mongoose";
 import validator from "validator";
-import { IUser } from "../types.js";
+import { IUser } from "../types/types.js";
 import jwt from "jsonwebtoken";
 
 const userSchema = new Schema<IUser>(
@@ -80,6 +80,7 @@ userSchema.methods.getJWT = async function (this: IUserJWT): Promise<string> {
       { expiresIn: "1d" },
       (err, token) => {
         if (err || !token) return reject(err);
+
         resolve(token);
       },
     );

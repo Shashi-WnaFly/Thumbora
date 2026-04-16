@@ -3,7 +3,7 @@ export interface IUser extends Document {
   emailId: string;
   password: string;
   age?: number;
-  gender?: ["male", "female", "other"];
+  gender?: IGender;
   verifyOtp?: string;
   otpExpireAt?: Date;
   isVerified?: boolean;
@@ -12,4 +12,4 @@ export interface IUser extends Document {
   updatedAt?: Date;
 }
 
-// export type Igender = "male" | "female" | "other";
+export type IGender = "male" | "female" | "other";

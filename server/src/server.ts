@@ -2,7 +2,7 @@ import "dotenv/config";
 import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
-import connectDB from "./src/config/database.ts";
+import connectDB from "./config/database.js";
 
 const app = express();
 
@@ -15,7 +15,7 @@ app.use(
 app.use(cookieParser());
 app.use(express.json());
 
-import authRoutes from "./src/routes/auth.ts";
+import authRoutes from "./routes/auth.js";
 
 app.use("/", authRoutes);
 

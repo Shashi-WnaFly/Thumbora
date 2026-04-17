@@ -13,8 +13,8 @@ export interface IUser extends Document {
 }
 
 export interface ISafeUser extends Document {
-  userName: string;
-  emailId: string;
+  userName?: string;
+  emailId?: string;
   age?: number;
   gender?: IGender;
   isVerified?: boolean;

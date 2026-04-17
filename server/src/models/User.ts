@@ -39,6 +39,7 @@ const userSchema = new Schema<IUser>(
     },
     gender: {
       type: String,
+      toLowerCase: true,
       enum: ["male", "female", "other"],
     },
     verifyOtp: {

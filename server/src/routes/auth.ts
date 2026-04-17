@@ -3,8 +3,6 @@ import { signUpValidation } from "../utils/validation.js";
 import validator from "validator";
 import User from "../models/User.js";
 import bcrypt from "bcrypt";
-import { userAuth } from "../middleware/auth.js";
-import { ISafeUser } from "../types/types.js";
 
 const router = express.Router();
 
@@ -60,7 +58,7 @@ router.post("/login", async (req: Request, res: Response) => {
     const token = await loggedUser.getJWT();
 
     res.cookie("token", token, {
-      expires: new Date(Date.now() + 60 * 60 * 24),
+      expires: new Date(Date.now() + 1000 * 60 * 60 * 24),
     });
     res.json({ success: true, message: "Logged in successfully" });
   } catch (error) {
@@ -68,12 +66,12 @@ router.post("/login", async (req: Request, res: Response) => {
   }
 });
 
-router.get("/profile", userAuth, (req: Request, res: Response) => {
+router.post("/logout", (req: Request, res: Response) => {
   try {
-    const user: ISafeUser = req.user;
-    res.json({ success: true, data: user });
+    res.cookie("token", null, { expires: new Date(Date.now()) });
+    res.json({ success: true, message: "Logout successful." });
   } catch (error) {
-    res.send(401).json({ success: false, message: (error as Error).message });
+    res.json({ success: false, message: (error as Error).message });
   }
 });
 

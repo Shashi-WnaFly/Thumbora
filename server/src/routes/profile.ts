@@ -2,6 +2,8 @@ import express, { Request, Response } from "express";
 import { userAuth } from "../middleware/auth.js";
 import { ISafeUser, IUser } from "../types/types.js";
 import { ALLOWED_USER_EDITS } from "../utils/constant.js";
+import validator from "validator";
+import bcrypt from "bcrypt";
 
 const router = express.Router();
 
@@ -39,5 +41,35 @@ router.patch("/profile/edit", userAuth, async (req: Request, res: Response) => {
     res.json({ success: false, message: (error as Error).message });
   }
 });
+
+router.patch(
+  "/profile/password/change",
+  userAuth,
+  async (req: Request, res: Response) => {
+    try {
+      const { prePassword, newPassword } = req.body;
+
+      if (
+        !prePassword ||
+        !newPassword ||
+        !validator.isStrongPassword(prePassword) ||
+        !validator.isStrongPassword(newPassword)
+      )
+        throw new Error("Credentials are Invalid!!");
+
+      const user = req.user;
+      const isMatch = await bcrypt.compare(prePassword, user.password);
+
+      if (!isMatch) throw new Error("Credentials are Invalid!!");
+
+      const newPassHash = await bcrypt.hash(newPassword, 10);
+      user.password = newPassHash;
+      await user.save();
+      res.json({ success: true, message: "Password changed successfully." });
+    } catch (error) {
+      res.json({ success: false, message: (error as Error).message });
+    }
+  },
+);
 
 export default router;

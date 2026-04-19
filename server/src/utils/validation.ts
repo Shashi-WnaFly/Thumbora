@@ -1,6 +1,7 @@
 import validator from "validator";
+import {Request} from "express";
 
-const signUpValidation = (req: any) => {
+const signUpValidation = (req: Request) => {
   let { userName, password, emailId } = req.body;
   userName = userName.trim();
   emailId = emailId.trim();

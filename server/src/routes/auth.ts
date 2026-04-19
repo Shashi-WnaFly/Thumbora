@@ -21,9 +21,10 @@ router.post("/signup", async (req: Request, res: Response) => {
     const token = await signUpUser.getJWT();
 
     res.cookie("token", token, {
-      expires: new Date(Date.now() + 60 * 60 * 24),
+      expires: new Date(Date.now() + 1000 * 60 * 60 * 24),
     });
-    res.status(200).json({ success: true, data: signUpUser });
+    req.user = signUpUser;
+    res.status(200).json({ success: true, message: "Signup successfully." });
   } catch (error) {
     res.status(400).json({ success: false, message: (error as Error).message });
   }
@@ -60,7 +61,8 @@ router.post("/login", async (req: Request, res: Response) => {
     res.cookie("token", token, {
       expires: new Date(Date.now() + 1000 * 60 * 60 * 24),
     });
-    res.json({ success: true, message: "Logged in successfully" });
+    req.user = loggedUser;
+    res.json({ success: true, message: "Logged in successfully." });
   } catch (error) {
     res.json({ success: false, message: (error as Error).message });
   }

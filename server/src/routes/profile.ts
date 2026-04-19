@@ -4,18 +4,9 @@ import { ISafeUser, IUser } from "../types/types.js";
 import { ALLOWED_USER_EDITS } from "../utils/constant.js";
 import validator from "validator";
 import bcrypt from "bcrypt";
+import { safeUser } from "../utils/common.js";
 
 const router = express.Router();
-
-const safeUser = (user: IUser): ISafeUser =>
-  ({
-    userName: user.userName,
-    emailId: user.emailId,
-    age: user.age,
-    gender: user.gender,
-    isVerified: user.isVerified,
-    avatarUrl: user.avatarUrl,
-  }) as ISafeUser;
 
 router.get("/profile/view", userAuth, (req: Request, res: Response) => {
   try {
@@ -36,7 +27,8 @@ router.patch("/profile/edit", userAuth, async (req: Request, res: Response) => {
     Object.keys(req.body).forEach((key) => (loggedUser[key] = req.body[key]));
 
     const updatedUser = await loggedUser.save();
-    res.json({ success: true, data: updatedUser });
+    req.user = updatedUser;
+    res.json({ success: true, message: "Profile edit successfully." });
   } catch (error) {
     res.json({ success: false, message: (error as Error).message });
   }

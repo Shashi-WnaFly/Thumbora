@@ -32,7 +32,7 @@ const ThumbnailSchema = new Schema<IThumbnail>(
     aspectRatio: {
       type: String,
       enum: ["16:9", "1:1", "9:16"],
-      default: "9:16"
+      default: "16:9"
     },
     colorScheme: {
       type: String,

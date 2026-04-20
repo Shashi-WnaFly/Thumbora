@@ -20,6 +20,7 @@ const ThumbnailSchema = new Schema<IThumbnail>(
     },
     style: {
       type: String,
+      required: true,
       enum: [
         "Bold & Graphic",
         "Tech/Futuristic",
@@ -31,6 +32,7 @@ const ThumbnailSchema = new Schema<IThumbnail>(
     aspectRatio: {
       type: String,
       enum: ["16:9", "1:1", "9:16"],
+      default: "9:16"
     },
     colorScheme: {
       type: String,
@@ -51,6 +53,7 @@ const ThumbnailSchema = new Schema<IThumbnail>(
     },
     imageUrl: {
       type: String,
+      default: "",
       validate: (value: string) => {
         if (!validator.isURL(value)) throw new Error("Invalid image url!!");
       },
@@ -60,11 +63,10 @@ const ThumbnailSchema = new Schema<IThumbnail>(
     },
     userPrompt: {
       type: String,
-      maxLength: 100,
     },
     isGenerating: {
       type: Boolean,
-      default: false,
+      default: true,
     },
   },
   { timestamps: true },

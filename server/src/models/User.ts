@@ -42,6 +42,10 @@ const userSchema = new Schema<IUser>(
       toLowerCase: true,
       enum: ["male", "female", "other"],
     },
+    imageUrls: {
+      type: [mongoose.Types.ObjectId],
+      default: [],
+    },
     verifyOtp: {
       type: String,
       default: null,

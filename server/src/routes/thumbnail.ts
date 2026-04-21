@@ -5,6 +5,8 @@ import { colorSchemeDescriptions, stylePrompts } from "../utils/constant.js";
 import { IColor, IStyle } from "../types/types.js";
 import ai, { generateConfig } from "../config/ai.js";
 import path from "node:path";
+import fs from "node:fs";
+import { v2 as cloudinary } from "cloudinary";
 
 const router = express.Router();
 
@@ -35,7 +37,7 @@ router.get(
       });
 
       const model = "gemini-3-pro-image-preview";
-    
+
       const generatingConfig = generateConfig(aspectRatio);
 
       let prompt = `create a ${stylePrompts[style as IStyle]} for: "${title}"`;
@@ -50,27 +52,44 @@ router.get(
 
       prompt += `The thumbnail should be ${aspectRatio}, visually stunning, and designed to maximize click-through rate. Make it bold, professional and impossible to ignore.`;
 
-      const res: any = ai.models.generateContent({
+      const response: any = ai.models.generateContent({
         model,
         contents: [prompt],
-        config: generatingConfig
-      })
+        config: generatingConfig,
+      });
 
-      if(!res?.candidates[0]?.content?.parts)
-        throw new Error ("Unexpected response");
+      if (!response?.candidates[0]?.content?.parts)
+        throw new Error("Unexpected response");
 
-      const parts = res.candidates[0].content.parts;
+      const parts = response.candidates[0].content.parts;
 
       let finalBuffer: Buffer | null = null;
 
-      for(const part of parts){
-        if(part.inlineData)
-            finalBuffer = Buffer.from(part.inlineData.data, 'base64');
+      for (const part of parts) {
+        if (part.inlineData)
+          finalBuffer = Buffer.from(part.inlineData.data, "base64");
       }
 
       const fileName = `final-output-${Date.now()}.png`;
-      const filepath = path.join('images', fileName);
+      const filePath = path.join("images", fileName);
 
+      fs.mkdirSync("images", { recursive: true });
+      fs.writeFileSync(filePath, finalBuffer!);
+
+      const uploadRes = await cloudinary.uploader.upload(filePath, {
+        resource_type: "image",
+      });
+
+      thumbnail.imageUrl = uploadRes.url;
+      thumbnail.isGenerating = false;
+
+      const user = req.user;
+      user.imageUrls.push(thumbnail._id);
+      await user.save();
+
+      await thumbnail.save();
+
+      res.json({ success: true, data: thumbnail });
     } catch (error) {
       res.json({ success: false, message: (error as Error).message });
     }

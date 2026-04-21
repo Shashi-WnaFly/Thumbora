@@ -31,7 +31,7 @@ export interface IThumbnail extends Document {
   description?: string;
   style: IStyle;
   aspectRatio?: IAspectRatio;
-  colorScheme?: IStyle;
+  colorScheme?: IColor;
   textOverlay?: boolean;
   imageUrl?: string;
   promptUsed?: string;

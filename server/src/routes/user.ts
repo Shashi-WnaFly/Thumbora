@@ -10,7 +10,7 @@ import { v2 as cloudinary } from "cloudinary";
 
 const router = express.Router();
 
-router.get(
+router.post(
   "/user/generate/thumbnail",
   userAuth,
   async (req: Request, res: Response) => {
@@ -84,8 +84,23 @@ router.get(
       thumbnail.isGenerating = false;
 
       await thumbnail.save();
-
       res.json({ success: true, data: thumbnail });
+      fs.unlinkSync(filePath);
+    } catch (error) {
+      res.json({ success: false, message: (error as Error).message });
+    }
+  },
+);
+
+router.delete(
+  "/user/thumbnail/delete/:thumbId",
+  userAuth,
+  async (req: Request, res: Response) => {
+    try {
+      const {thumbId} = req.params;
+      await Thumbnail.findByIdAndDelete(thumbId);
+
+      res.json({ success: true, message: "Thumbnail successfully deleted." });
     } catch (error) {
       res.json({ success: false, message: (error as Error).message });
     }

@@ -8,6 +8,7 @@ const ThumbnailSchema = new Schema<IThumbnail>(
       type: mongoose.Schema.Types.ObjectId,
       required: true,
       ref: "User",
+      index: true
     },
     title: {
       type: String,

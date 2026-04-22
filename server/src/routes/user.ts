@@ -11,7 +11,7 @@ import { v2 as cloudinary } from "cloudinary";
 const router = express.Router();
 
 router.get(
-  "/generate/thumbnail",
+  "/user/generate/thumbnail",
   userAuth,
   async (req: Request, res: Response) => {
     try {
@@ -83,10 +83,6 @@ router.get(
       thumbnail.imageUrl = uploadRes.url;
       thumbnail.isGenerating = false;
 
-      const user = req.user;
-      user.imageUrls.push(thumbnail._id);
-      await user.save();
-
       await thumbnail.save();
 
       res.json({ success: true, data: thumbnail });
@@ -95,3 +91,5 @@ router.get(
     }
   },
 );
+
+export default router;

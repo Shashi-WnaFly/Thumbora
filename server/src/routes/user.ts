@@ -2,7 +2,7 @@ import express, { Request, Response } from "express";
 import { userAuth } from "../middleware/auth.js";
 import Thumbnail from "../models/Thumbnail.js";
 import { colorSchemeDescriptions, stylePrompts } from "../utils/constant.js";
-import { IColor, IStyle } from "../types/types.js";
+import { IColor, IPagination, IStyle } from "../types/types.js";
 import ai, { generateConfig } from "../config/ai.js";
 import path from "node:path";
 import fs from "node:fs";
@@ -92,12 +92,56 @@ router.post(
   },
 );
 
+router.get(
+  "/user/thumbnails",
+  userAuth,
+  async (req: Request, res: Response) => {
+    try {
+      const userId = req.user._id;
+      let page = Math.max(1, parseInt(req.query.page as string) || 1);
+      let limit = Math.min(
+        25,
+        Math.max(1, parseInt(req.query.limit as string) || 12),
+      );
+      const skip = (page - 1) * limit;
+
+      const [userThumbnails, totalDoc] = await Promise.all([
+        await Thumbnail.find({ userId })
+          .sort({ createdAt: -1 })
+          .skip(skip)
+          .limit(limit)
+          .lean(),
+        Thumbnail.countDocuments({ userId }),
+      ]);
+      const totalPages = Math.ceil(totalDoc / limit);
+
+      const paginationRes: IPagination = {
+        totalThumbnails: totalDoc,
+        page,
+        limit,
+        totalPages,
+        hasNextPage: page < totalPages,
+      };
+
+      res.json({
+        success: true,
+        data: userThumbnails,
+        pagination: paginationRes,
+      });
+    } catch (error) {
+      res
+        .status(500)
+        .json({ success: false, message: (error as Error).message });
+    }
+  },
+);
+
 router.delete(
   "/user/thumbnail/delete/:thumbId",
   userAuth,
   async (req: Request, res: Response) => {
     try {
-      const {thumbId} = req.params;
+      const { thumbId } = req.params;
       await Thumbnail.findByIdAndDelete(thumbId);
 
       res.json({ success: true, message: "Thumbnail successfully deleted." });

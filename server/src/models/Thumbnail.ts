@@ -8,7 +8,6 @@ const ThumbnailSchema = new Schema<IThumbnail>(
       type: mongoose.Schema.Types.ObjectId,
       required: true,
       ref: "User",
-      index: true
     },
     title: {
       type: String,
@@ -33,7 +32,7 @@ const ThumbnailSchema = new Schema<IThumbnail>(
     aspectRatio: {
       type: String,
       enum: ["16:9", "1:1", "9:16"],
-      default: "16:9"
+      default: "16:9",
     },
     colorScheme: {
       type: String,
@@ -72,6 +71,8 @@ const ThumbnailSchema = new Schema<IThumbnail>(
   },
   { timestamps: true },
 );
+
+ThumbnailSchema.index({ userId: 1, createdAt: -1 }); // Compound index for efficient querying of user's thumbnails sorted by creation date
 
 const Thumbnail =
   mongoose.models.Thumbnail ||

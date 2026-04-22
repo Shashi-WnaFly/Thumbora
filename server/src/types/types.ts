@@ -6,7 +6,6 @@ export interface IUser extends Document {
   password: string;
   age?: number;
   gender?: IGender;
-  imageUrls: mongoose.Types.ObjectId[];
   verifyOtp?: string;
   otpExpireAt?: Date;
   isVerified?: boolean;
@@ -58,3 +57,11 @@ export type IStyle =
   | "Minimalist"
   | "Photorealistic"
   | "Illustrated";
+
+export interface IPagination {
+  totalThumbnails: number,
+  page: number,
+  limit: number,
+  totalPages: number,
+  hasNextPage: boolean
+}

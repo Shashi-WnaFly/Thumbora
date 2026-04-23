@@ -12,6 +12,8 @@ import Login from "./Pages/Login";
 import MyGenerations from "./Pages/MyGenerations";
 import YTPreview from "./Pages/YTPreview";
 import { useEffect } from "react";
+import appStore from "./utils/appStore";
+import { Provider } from "react-redux";
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -57,7 +59,11 @@ const router = createBrowserRouter([
 ]);
 
 function App() {
-  return <RouterProvider router={router}></RouterProvider>;
+  return (
+    <Provider store={appStore}>
+      <RouterProvider router={router}></RouterProvider>
+    </Provider>
+  );
 }
 
 export default App;

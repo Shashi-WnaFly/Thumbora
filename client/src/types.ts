@@ -1,5 +1,3 @@
-import type { ReactHTMLElement } from "react";
-
 export interface INavLink {
   name: string;
   to: string;

@@ -1,8 +1,12 @@
 import React, { useState } from "react";
 import SoftBackdrop from "../components/SoftBackdrop";
+import api from "../configs/api";
+import { useDispatch } from "react-redux";
+import { addUser } from "../utils/userSlice";
 
 const Login = () => {
   const [state, setState] = useState("login");
+  const dispatch = useDispatch();
 
   const [formData, setFormData] = useState({
     name: "",
@@ -15,8 +19,22 @@ const Login = () => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e: React.SubmitEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (state === "signup") {
+      try {
+        const { name, email, password } = formData;
+        const { data } = await api.post("/signup", {
+          userName: name,
+          emailId: email,
+          password,
+        });
+        dispatch(addUser(data.data));
+        console.log(data);
+      } catch (error) {
+        console.log((error as Error).message);
+      }
+    }
   };
   return (
     <div className="h-screen px-4 md:px-8 lg:px-24 xl:px-32">
@@ -135,14 +153,16 @@ const Login = () => {
 
           <p
             onClick={() =>
-              setState((prev) => (prev === "login" ? "register" : "login"))
+              setState((prev) => (prev === "login" ? "signup" : "login"))
             }
             className="text-gray-400 text-sm mt-3 mb-11 cursor-pointer"
           >
             {state === "login"
               ? "Don't have an account?"
               : "Already have an account?"}
-            <span className="text-orange-400 hover:underline ml-1">click here</span>
+            <span className="text-orange-400 hover:underline ml-1">
+              click here
+            </span>
           </p>
         </form>
       </div>

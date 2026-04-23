@@ -1,7 +1,7 @@
 import express, { Request, Response } from "express";
 import { userAuth } from "../middleware/auth.js";
 import Thumbnail from "../models/Thumbnail.js";
-import { colorSchemeDescriptions, stylePrompts } from "../utils/constant.js";
+import { colorSchemeDescriptions, stylePrompts } from "../utils/constants.js";
 import { IColor, IPagination, IStyle } from "../types/types.js";
 import ai, { generateConfig } from "../config/ai.js";
 import path from "node:path";

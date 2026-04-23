@@ -1,7 +1,7 @@
 import express, { Request, Response } from "express";
 import { userAuth } from "../middleware/auth.js";
 import { ISafeUser, IUser } from "../types/types.js";
-import { ALLOWED_USER_EDITS } from "../utils/constant.js";
+import { ALLOWED_USER_EDITS } from "../utils/constants.js";
 import validator from "validator";
 import bcrypt from "bcrypt";
 import { safeUser } from "../utils/common.js";

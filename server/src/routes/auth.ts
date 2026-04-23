@@ -3,6 +3,7 @@ import { signUpValidation } from "../utils/validation.js";
 import validator from "validator";
 import User from "../models/User.js";
 import bcrypt from "bcrypt";
+import { safeUser } from "../utils/common.js";
 
 const router = express.Router();
 
@@ -24,7 +25,7 @@ router.post("/signup", async (req: Request, res: Response) => {
       expires: new Date(Date.now() + 1000 * 60 * 60 * 24),
     });
     req.user = signUpUser;
-    res.status(200).json({ success: true, message: "Signup successfully." });
+    res.status(200).json({ success: true, data: safeUser(signUpUser) });
   } catch (error) {
     res.status(400).json({ success: false, message: (error as Error).message });
   }
@@ -62,7 +63,7 @@ router.post("/login", async (req: Request, res: Response) => {
       expires: new Date(Date.now() + 1000 * 60 * 60 * 24),
     });
     req.user = loggedUser;
-    res.json({ success: true, message: "Logged in successfully." });
+    res.json({ success: true, data: safeUser(loggedUser) });
   } catch (error) {
     res.json({ success: false, message: (error as Error).message });
   }

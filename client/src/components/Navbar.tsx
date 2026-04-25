@@ -1,18 +1,40 @@
 import { MenuIcon, XIcon } from "lucide-react";
 import Logo from "../../public/assets/Logo";
 import { navLinks } from "../data/navLinks";
-import type { INavLink } from "../types";
+import type { INavLink, IStore } from "../types";
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import api from "../configs/api";
+import { removeUser } from "../utils/userSlice";
 
 export default function Navbar() {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
+  const user = useSelector((store: IStore) => store.user);
+
+  const handleAccess = async () => {
+    if (user) {
+      try {
+        const { data } = await api.post("/logout");
+        dispatch(removeUser());
+        console.log(data.message);
+        navigate("/login");
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  };
+
   return (
     <div
       className={` h-18 w-full top-0 fixed z-30 flex justify-between items-center px-6 md:px-16 lg:px-24 xl:px-32 ${!isMenuOpen && "backdrop-blur"}`}
     >
-      <div onClick={() => navigate("/")} className="flex items-center cursor-pointer">
+      <div
+        onClick={() => navigate("/")}
+        className="flex items-center cursor-pointer"
+      >
         <div className="w-10 h-10 p-2">
           <Logo />
         </div>
@@ -30,10 +52,10 @@ export default function Navbar() {
         ))}
       </div>
       <button
-        onClick={() => navigate("/login")}
+        onClick={handleAccess}
         className="hidden md:block bg-orange-600 text-white px-4 py-2 rounded-full hover:bg-orange-700"
       >
-        Get Started
+        {user ? "Log out" : "Get Started"}
       </button>
       <button className="md:hidden" onClick={() => setIsMenuOpen(true)}>
         <MenuIcon className="active:scale-90 transition" size={24} />

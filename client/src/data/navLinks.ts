@@ -17,4 +17,8 @@ export const navLinks: INavLink[] = [
     name: "My Contact",
     to: "/contact",
   },
+  {
+    name: "Logout",
+    to: "/login",
+  },
 ];

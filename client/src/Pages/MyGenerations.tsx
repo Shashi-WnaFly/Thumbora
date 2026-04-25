@@ -4,9 +4,16 @@ import type { IAspectRatio, IThumbnail } from "../data/dataAssets";
 import ThumbnailCard from "../components/ThumbnailCard";
 import { demoThumbnail } from "../data/dataAssets";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import type { IStore } from "../types";
 
 const MyGenerations = () => {
   const navigate = useNavigate();
+  const user = useSelector((store: IStore) => store.user);
+
+  useEffect(() => {
+    if (!user) navigate("/login");
+  }, [user, navigate]);
 
   const AspectRatioClass: Record<IAspectRatio, string> = {
     "16:9": "aspect-video",

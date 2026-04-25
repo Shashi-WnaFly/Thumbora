@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import SoftBackdrop from "../components/SoftBackdrop";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import AspectRatioSelector from "../components/AspectRatioSelector";
 import { demoThumbnail } from "../data/dataAssets";
 import type {
@@ -11,8 +11,13 @@ import type {
 import StyleSelector from "../components/StyleSelector";
 import ColorSchemeSelector from "../components/ColorSchemeSelector";
 import PreviewPanel from "../components/PreviewPanel";
+import { useSelector } from "react-redux";
+import type { IStore } from "../types";
+import { BASE_URL } from "../utils/constants";
 
 const Generate = () => {
+  const user = useSelector((store: IStore) => store.user);
+  const navigate = useNavigate();
   const { thumbId } = useParams<string>();
   const [title, setTitle] = useState<string>("");
   const [aspectRatio, setAspectRatio] = useState<IAspectRatio>("16:9");
@@ -22,6 +27,10 @@ const Generate = () => {
   const [additionalInfo, setAdditionalInfo] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
   const [thumbnail, setThumbnail] = useState<IThumbnail | null>(null);
+
+  useEffect(() => {
+    if (!user) navigate(`/login`);
+  }, [user, navigate]);
 
   const fetchThumbnail = async (thumbId: string) => {
     setLoading(true);

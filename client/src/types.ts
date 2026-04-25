@@ -49,3 +49,7 @@ export interface IFooter {
   title: string;
   links: ILink[];
 }
+
+export interface IStore {
+  user: object
+}

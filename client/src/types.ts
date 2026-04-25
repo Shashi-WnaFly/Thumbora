@@ -51,5 +51,13 @@ export interface IFooter {
 }
 
 export interface IStore {
-  user: object
+  user: object;
+  toast: IToast[];
+}
+
+export interface IToast {
+  id: number;
+  type: string;
+  message: string;
+  timeout: number;
 }

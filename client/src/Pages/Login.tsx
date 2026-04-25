@@ -3,10 +3,12 @@ import SoftBackdrop from "../components/SoftBackdrop";
 import api from "../configs/api";
 import { useDispatch } from "react-redux";
 import { addUser } from "../utils/userSlice";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
   const [state, setState] = useState("login");
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
     name: "",
@@ -20,20 +22,27 @@ const Login = () => {
   };
 
   const handleSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    if (state === "signup") {
-      try {
-        const { name, email, password } = formData;
+    try {
+      e.preventDefault();
+      const { name, email, password } = formData;
+      if (state === "signup") {
         const { data } = await api.post("/signup", {
           userName: name,
           emailId: email,
           password,
         });
         dispatch(addUser(data.data));
-        console.log(data);
-      } catch (error) {
-        console.log((error as Error).message);
+        navigate("/");  
+      } else {
+        const { data } = await api.post(`/login`, {
+          emailId: email,
+          password,
+        });
+        dispatch(addUser(data.data));
+        navigate("/");
       }
+    } catch (error) {
+      console.log((error as Error).message);
     }
   };
   return (

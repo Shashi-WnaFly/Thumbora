@@ -59,5 +59,5 @@ export interface IToast {
   id: number;
   type: string;
   message: string;
-  timeout: number;
+  timeout: ReturnType<typeof setTimeout>;
 }

@@ -10,8 +10,9 @@ const toastSlice = createSlice({
     },
     removeToast: (state, action) => {
       const t = state.find((n) => n.id === action.payload);
-      clearTimeout(t?.timeout);
-      state.filter((n) => n.id !== action.payload);
+      if(t?.timeout)
+        clearTimeout(t.timeout);
+      return state.filter((n) => n.id !== action.payload);
     },
   },
 });

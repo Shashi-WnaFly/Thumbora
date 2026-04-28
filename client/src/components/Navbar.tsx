@@ -7,23 +7,27 @@ import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import api from "../configs/api";
 import { removeUser } from "../utils/userSlice";
+import useToast from "../hooks/useToast";
 
 export default function Navbar() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
   const user = useSelector((store: IStore) => store.user);
+  const { showToast } = useToast();
 
   const handleAccess = async () => {
-    if (user) {
-      try {
+    try {
+      if (user) {
         const { data } = await api.post("/logout");
         dispatch(removeUser());
-        console.log(data.message);
+        showToast("success", data.message);
         navigate("/login");
-      } catch (error) {
-        console.log(error);
+      } else {
+        navigate("/login");
       }
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -41,15 +45,18 @@ export default function Navbar() {
         <h3 className="text-2xl font-semibold">Thumbora</h3>
       </div>
       <div className="hidden md:flex gap-6 text-md transition duration-500">
-        {navLinks.map((link: INavLink) => (
-          <Link
-            key={link.name}
-            to={link.to}
-            className="border-b-4 border-transparent hover:border-orange-600 transition active:text-orange-500 duration-300"
-          >
-            {link.name}
-          </Link>
-        ))}
+        {navLinks.map((link: INavLink) => {
+          if (link.name === "Logout") return;
+          return (
+            <Link
+              key={link.name}
+              to={link.to}
+              className="border-b-4 border-transparent hover:border-orange-600 transition active:text-orange-500 duration-300"
+            >
+              {link.name}
+            </Link>
+          );
+        })}
       </div>
       <button
         onClick={handleAccess}
@@ -64,16 +71,18 @@ export default function Navbar() {
         className={`fixed inset-0 bg-black/40 flex flex-col w-full h-screen z-100 backdrop-blur justify-center items-center md:hidden gap-6 text-md transform duration-400
           ${isMenuOpen ? "translate-x-0" : "-translate-x-full"} `}
       >
-        {navLinks.map((link: INavLink) => (
-          <Link
-            key={link.name}
-            to={link.to}
-            onClick={() => setIsMenuOpen(false)}
-            className="border-b-4 border-transparent hover:border-orange-600 transition active:text-orange-500 duration-300"
-          >
-            {link.name}
-          </Link>
-        ))}
+        {navLinks.map((link: INavLink) => {
+          return (
+            <Link
+              key={link.name}
+              to={link.to}
+              onClick={() => setIsMenuOpen(false)}
+              className="border-b-4 border-transparent hover:border-orange-600 transition active:text-orange-500 duration-300"
+            >
+              {link.name}
+            </Link>
+          );
+        })}
         <button
           className="bg-orange-600 text-white font-semibold px-4 py-2 rounded-md hover:bg-orange-700"
           onClick={() => setIsMenuOpen(false)}

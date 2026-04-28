@@ -1,8 +1,8 @@
 import { useCallback } from "react";
-import { addToast, removeToast } from "../utils/ToastSlice";
+import { addToast, removeToast } from "../utils/toastSlice";
 import { useDispatch } from "react-redux";
 
-const Toast = (duration = 3000) => {
+const useToast = (duration = 3000) => {
   const dispatch = useDispatch();
 
   const showToast = useCallback(
@@ -13,10 +13,10 @@ const Toast = (duration = 3000) => {
       }, duration);
       dispatch(addToast({ id, type, message, timeout: to }));
     },
-    [duration],
+    [duration, dispatch],
   );
 
   return { showToast };
 };
 
-export default Toast;
+export default useToast;

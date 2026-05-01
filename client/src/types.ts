@@ -56,8 +56,8 @@ export interface IStore {
 }
 
 export interface IToast {
-  id: number;
+  id?: number;
   type: string;
   message: string;
-  timeout: ReturnType<typeof setTimeout>;
+  timeout?: ReturnType<typeof setTimeout>;
 }

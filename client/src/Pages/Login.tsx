@@ -4,18 +4,20 @@ import api from "../configs/api";
 import { useDispatch } from "react-redux";
 import { addUser } from "../utils/userSlice";
 import { useNavigate } from "react-router-dom";
+import useToast from "../hooks/useToast";
+import { loginValidation, signUpValidation } from "../utils/validation";
 
 const Login = () => {
   const [state, setState] = useState("login");
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { showToast } = useToast();
 
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     password: "",
   });
-
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
@@ -26,23 +28,28 @@ const Login = () => {
       e.preventDefault();
       const { name, email, password } = formData;
       if (state === "signup") {
+        if (!signUpValidation(name, email, password, showToast)) return;
         const { data } = await api.post("/signup", {
           userName: name,
-          emailId: email,
           password,
+          emailId: email,
         });
+
         dispatch(addUser(data.data));
-        navigate("/");  
+        showToast("success", "Yeh! you registered successfully!!");
+        navigate("/");
       } else {
-        const { data } = await api.post(`/login`, {
+        if (!loginValidation(email, password, showToast)) return;
+        const { data } = await api.post("/login", {
           emailId: email,
           password,
         });
         dispatch(addUser(data.data));
+        showToast("success", "Login successfully.");
         navigate("/");
       }
-    } catch (error) {
-      console.log((error as Error).message);
+    } catch {
+      showToast("error", "Something went wrong!!");
     }
   };
   return (

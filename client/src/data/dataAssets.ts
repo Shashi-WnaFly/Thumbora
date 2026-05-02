@@ -1,4 +1,4 @@
-import img_1 from "../../public/assets/Excited_duo_promoting_design_tool.png";
+import img_1 from "/assets/Excited_duo_promoting_design_tool.png";
 
 export const AspectRatios = ["16:9", "1:1", "9:16"] as const;
 export type IAspectRatio = (typeof AspectRatios)[number];

@@ -1,8 +1,7 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import SoftBackdrop from "../components/SoftBackdrop";
 import { useNavigate, useParams } from "react-router-dom";
 import AspectRatioSelector from "../components/AspectRatioSelector";
-import { demoThumbnail } from "../data/dataAssets";
 import type {
   IAspectRatio,
   IThumbnailStyle,
@@ -13,7 +12,8 @@ import ColorSchemeSelector from "../components/ColorSchemeSelector";
 import PreviewPanel from "../components/PreviewPanel";
 import { useSelector } from "react-redux";
 import type { IStore } from "../types";
-import { BASE_URL } from "../utils/constants";
+import api from "../configs/api";
+import useToast from "../hooks/useToast";
 
 const Generate = () => {
   const user = useSelector((store: IStore) => store.user);
@@ -27,32 +27,42 @@ const Generate = () => {
   const [additionalInfo, setAdditionalInfo] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
   const [thumbnail, setThumbnail] = useState<IThumbnail | null>(null);
+  const { showToast } = useToast();
 
   useEffect(() => {
     if (!user) navigate(`/login`);
   }, [user, navigate]);
 
-  const fetchThumbnail = async (thumbId: string) => {
-    setLoading(true);
-    // Simulate API call to fetch thumbnail by ID
-    setTimeout(() => {
-      const thmbnail =
-        demoThumbnail.find((thumb) => thumb._id === thumbId) || null;
-      setThumbnail(thmbnail);
-      setTitle(thmbnail?.title || "");
-      setAspectRatio((thmbnail?.aspect_ratio as IAspectRatio) || "16:9");
-      setStyle((thmbnail?.style as IThumbnailStyle) || "Bold & Graphic");
-      setColorScheme(thmbnail?.color_scheme || "vibrant");
-      setAdditionalInfo(thmbnail?.user_prompt || "");
-      setLoading(false);
-    }, 3000);
+  const fetchThumbnail = async () => {
+    try {
+      if(!title){
+        setLoading(false);
+        showToast("warning", "Fill the title fields!!");
+        return;
+      }
+
+      const thmbnail = await api.post(`/user/generate/thumbnail`, {
+        title,
+        prompt: additionalInfo,
+        style,
+        aspectRatio,
+        colorScheme,
+        textOverlay: false,
+      });
+      setThumbnail(thmbnail?.data);
+      setLoading(thumbnail?.isGenerating || false);
+
+      // console.log("generate");
+    } catch {
+      showToast("error", "Something went wrong!!");
+    }
   };
 
-  useEffect(() => {
-    if (thumbId) {
-      fetchThumbnail(thumbId);
-    }
-  }, [thumbId]);
+  // useEffect(() => {
+  //   if (!thumbId) {
+  //     fetchThumbnail();
+  //   }
+  // }, [thumbId]);
 
   return (
     <div className="pt-19 min-h-screen">
@@ -117,12 +127,16 @@ const Generate = () => {
                   onChange={(e) => setAdditionalInfo(e.target.value)}
                   className="block w-full rounded-lg outline-0 border border-zinc-600 resize-none shadow-sm focus:ring-2 focus:ring-orange-700 p-2 sm:text-sm bg-transparent text-zinc-300 mt-1"
                   placeholder="e.g., 'Include a steaming coffee cup and beans in the background'"
+                  maxLength={200}
                 ></textarea>
               </div>
               {!thumbId && (
                 <button
                   className="w-full text-[15px] py-3.5 rounded-xl font-medium bg-linear-to-b from-orange-500 to-orange-600 hover:from-orange-700 disabled:cursor-not-allowed transition-colors"
-                  onClick={() => setLoading(true)}
+                  onClick={() => {
+                    setLoading(true);
+                    fetchThumbnail();
+                  }}
                   disabled={loading}
                 >
                   {loading ? "Generating..." : "Generate Thumbnails"}

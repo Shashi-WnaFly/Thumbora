@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { ThumbnailStyles, type ThumbnailStyle } from "../data/dataAssets";
+import React from "react";
+import { ThumbnailStyles, type IThumbnailStyle } from "../data/dataAssets";
 import {
   LuChevronUp,
   LuCpu,
@@ -15,13 +15,13 @@ const StyleSelector = ({
   isOpen,
   setIsOpen,
 }: {
-  value: ThumbnailStyle;
-  onChange: (value: ThumbnailStyle) => void;
+  value: IThumbnailStyle;
+  onChange: (value: IThumbnailStyle) => void;
   isOpen: boolean;
   setIsOpen: (isOpen: boolean) => void;
 }) => {
   //   const [showStyles, setShowStyles] = useState<boolean>(false);
-  const styleDescriptions: Record<ThumbnailStyle, string> = {
+  const styleDescriptions: Record<IThumbnailStyle, string> = {
     "Bold & Graphic": "High contrast, bold typography, striking visuals",
     Minimalistic: "Clean design, ample white space, simple typography",
     Realistic: "Photo-realistic images, natural colors, detailed textures",
@@ -29,7 +29,7 @@ const StyleSelector = ({
     "Tech/Futuristic": "Sleek design, Modern, tech-inspired visuals",
   };
 
-  const styleIcons: Record<ThumbnailStyle, React.ReactNode> = {
+  const styleIcons: Record<IThumbnailStyle, React.ReactNode> = {
     "Bold & Graphic": <LuSparkle className="w-5 h-5 text-orange-500" />,
     Minimalistic: <LuSquare className="w-5 h-5 text-orange-500" />,
     Realistic: <LuImage className="w-5 h-5 text-orange-500" />,
@@ -65,6 +65,7 @@ const StyleSelector = ({
         <div className="absolute z-50 bottom-0 mt-1 w-full rounded-md bg-black/20 border border-white/12 backdrop-blur-2xl shadow-lg">
           {ThumbnailStyles.map((style) => (
             <button
+              key={style}
               type="button"
               onClick={() => {
                 onChange(style);

@@ -19,7 +19,6 @@ function Body() {
       dispatch(addUser(user.data.data));
       navigate('/');
     } catch {
-      console.log("Something went wrong!!");
       navigate('/login');
     }
   }

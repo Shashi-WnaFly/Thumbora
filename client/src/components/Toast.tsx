@@ -16,9 +16,9 @@ const toastIcons: Record<IToast["type"], JSX.Element> = {
 };
 
 const toastColors: Record<IToast["type"], string> = {
-  success: "bg-orange-500",
-  warning: "bg-yellow-600",
-  error: "bg-red-500",
+  success: "bg-green-500",
+  warning: "bg-orange-600",
+  error: "bg-red-600",
 };
 
 const Toast = memo(() => {

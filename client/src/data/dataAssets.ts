@@ -43,8 +43,8 @@ export interface IThumbnail {
     | "Minimalist"
     | "Photorealistic"
     | "Illustrated";
-  aspect_ratio?: "16:9" | "1:1" | "9:16";
-  color_scheme?:
+  aspectRatio?: "16:9" | "1:1" | "9:16";
+  colorScheme?:
     | "vibrant"
     | "sunset"
     | "forest"
@@ -53,10 +53,10 @@ export interface IThumbnail {
     | "monochrome"
     | "ocean"
     | "pastel";
-  text_overlay?: boolean;
-  image_url?: string;
-  prompt_used?: string;
-  user_prompt?: string;
+  textOverlay?: boolean;
+  imageUrl?: string;
+  promptUsed?: string;
+  userPrompt?: string;
   isGenerating?: boolean;
   createdAt?: Date;
   updatedAt?: Date;

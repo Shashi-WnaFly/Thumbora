@@ -20,19 +20,30 @@ const Generate = () => {
   const { thumbId } = useParams<string>();
   const user = useSelector((store: IStore) => store.user);
   const thumbnailList = useSelector((store: IStore) => store.thumbnailList);
-  
-  const curThumbnail = useMemo(() => thumbnailList.find((t) => t._id === thumbId), [thumbId, thumbnailList]);
-  
+
+  const curThumbnail = useMemo(
+    () => thumbnailList.find((t) => t._id === thumbId),
+    [thumbId, thumbnailList],
+  );
+
   const thumbnail: IThumbnail | null = curThumbnail || null;
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [title, setTitle] = useState<string>(curThumbnail?.title || "");
-  const [aspectRatio, setAspectRatio] = useState<IAspectRatio>(curThumbnail?.aspectRatio || "16:9");
-  const [style, setStyle] = useState<IThumbnailStyle>(curThumbnail?.style as IThumbnailStyle || "Bold & Graphic");
-  const [colorScheme, setColorScheme] = useState<string>(curThumbnail?.colorScheme || "vibrant");
+  const [aspectRatio, setAspectRatio] = useState<IAspectRatio>(
+    curThumbnail?.aspectRatio || "16:9",
+  );
+  const [style, setStyle] = useState<IThumbnailStyle>(
+    (curThumbnail?.style as IThumbnailStyle) || "Bold & Graphic",
+  );
+  const [colorScheme, setColorScheme] = useState<string>(
+    curThumbnail?.colorScheme || "vibrant",
+  );
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const [additionalInfo, setAdditionalInfo] = useState<string>(curThumbnail?.userPrompt || "");
-  const [loading, setLoading] = useState<boolean>(false);
+  const [additionalInfo, setAdditionalInfo] = useState<string>(
+    curThumbnail?.userPrompt || "",
+  );
+  const [loading, setLoading] = useState<boolean>(curThumbnail?.isGenerating || false);
   const { showToast } = useToast();
 
   useEffect(() => {
@@ -58,12 +69,20 @@ const Generate = () => {
       });
       dispatch(unShiftThumbnail(thmbnail.data));
       navigate(`/generate/${thmbnail.data._id}`);
-      setLoading(false);
-    } catch (error){
+    } catch (error) {
       console.log(error);
       showToast("error", (error as Error).message);
     }
   };
+
+  useEffect(() => {
+    if (user && loading) {
+      const interval = setInterval(() => {
+        fetchThumbnail();
+      }, 10000);
+      return () => clearInterval(interval);
+    }
+  }, [user, loading]);
 
   return (
     <div className="pt-19 min-h-screen">
@@ -147,7 +166,12 @@ const Generate = () => {
             <div className="p-6 rounded-2xl bg-white/8 border border-white/10 shadow-xl">
               <h2 className="text-lg font-semibold text-zinc-100">Preview</h2>
               <PreviewPanel
-                thumbnail={{ title: thumbnail?.title, imageUrl: thumbnail?.imageUrl } as IThumbnail}
+                thumbnail={
+                  {
+                    title: thumbnail?.title,
+                    imageUrl: thumbnail?.imageUrl,
+                  } as IThumbnail
+                }
                 isLoading={loading}
                 aspectRatio={aspectRatio}
               />

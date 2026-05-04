@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import SoftBackdrop from "../components/SoftBackdrop";
 import { useNavigate, useParams } from "react-router-dom";
 import AspectRatioSelector from "../components/AspectRatioSelector";
@@ -10,23 +10,29 @@ import type {
 import StyleSelector from "../components/StyleSelector";
 import ColorSchemeSelector from "../components/ColorSchemeSelector";
 import PreviewPanel from "../components/PreviewPanel";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import type { IStore } from "../types";
 import api from "../configs/api";
 import useToast from "../hooks/useToast";
+import { unShiftThumbnail } from "../utils/thumbnailListSlice";
 
 const Generate = () => {
-  const user = useSelector((store: IStore) => store.user);
-  const navigate = useNavigate();
   const { thumbId } = useParams<string>();
-  const [title, setTitle] = useState<string>("");
-  const [aspectRatio, setAspectRatio] = useState<IAspectRatio>("16:9");
-  const [style, setStyle] = useState<IThumbnailStyle>("Bold & Graphic");
-  const [colorScheme, setColorScheme] = useState<string>("vibrant");
+  const user = useSelector((store: IStore) => store.user);
+  const thumbnailList = useSelector((store: IStore) => store.thumbnailList);
+  
+  const curThumbnail = useMemo(() => thumbnailList.find((t) => t._id === thumbId), [thumbId, thumbnailList]);
+  
+  const thumbnail: IThumbnail | null = curThumbnail || null;
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const [title, setTitle] = useState<string>(curThumbnail?.title || "");
+  const [aspectRatio, setAspectRatio] = useState<IAspectRatio>(curThumbnail?.aspectRatio || "16:9");
+  const [style, setStyle] = useState<IThumbnailStyle>(curThumbnail?.style as IThumbnailStyle || "Bold & Graphic");
+  const [colorScheme, setColorScheme] = useState<string>(curThumbnail?.colorScheme || "vibrant");
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const [additionalInfo, setAdditionalInfo] = useState<string>("");
+  const [additionalInfo, setAdditionalInfo] = useState<string>(curThumbnail?.userPrompt || "");
   const [loading, setLoading] = useState<boolean>(false);
-  const [thumbnail, setThumbnail] = useState<IThumbnail | null>(null);
   const { showToast } = useToast();
 
   useEffect(() => {
@@ -35,7 +41,8 @@ const Generate = () => {
 
   const fetchThumbnail = async () => {
     try {
-      if(!title){
+      setLoading(true);
+      if (!title.trim()) {
         setLoading(false);
         showToast("warning", "Fill the title fields!!");
         return;
@@ -47,22 +54,16 @@ const Generate = () => {
         style,
         aspectRatio,
         colorScheme,
-        textOverlay: false,
+        textOverlay: true,
       });
-      setThumbnail(thmbnail?.data);
-      setLoading(thumbnail?.isGenerating || false);
-
-      // console.log("generate");
-    } catch {
-      showToast("error", "Something went wrong!!");
+      dispatch(unShiftThumbnail(thmbnail.data));
+      navigate(`/generate/${thmbnail.data._id}`);
+      setLoading(false);
+    } catch (error){
+      console.log(error);
+      showToast("error", (error as Error).message);
     }
   };
-
-  // useEffect(() => {
-  //   if (!thumbId) {
-  //     fetchThumbnail();
-  //   }
-  // }, [thumbId]);
 
   return (
     <div className="pt-19 min-h-screen">
@@ -133,10 +134,7 @@ const Generate = () => {
               {!thumbId && (
                 <button
                   className="w-full text-[15px] py-3.5 rounded-xl font-medium bg-linear-to-b from-orange-500 to-orange-600 hover:from-orange-700 disabled:cursor-not-allowed transition-colors"
-                  onClick={() => {
-                    setLoading(true);
-                    fetchThumbnail();
-                  }}
+                  onClick={() => fetchThumbnail()}
                   disabled={loading}
                 >
                   {loading ? "Generating..." : "Generate Thumbnails"}
@@ -149,7 +147,7 @@ const Generate = () => {
             <div className="p-6 rounded-2xl bg-white/8 border border-white/10 shadow-xl">
               <h2 className="text-lg font-semibold text-zinc-100">Preview</h2>
               <PreviewPanel
-                thumbnail={thumbnail}
+                thumbnail={{ title: thumbnail?.title, imageUrl: thumbnail?.imageUrl } as IThumbnail}
                 isLoading={loading}
                 aspectRatio={aspectRatio}
               />

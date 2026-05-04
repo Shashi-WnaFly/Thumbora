@@ -1,5 +1,4 @@
-import React from "react";
-import type { AspectRatio, IThumbnail } from "../data/dataAssets";
+import type { IAspectRatio, IThumbnail } from "../data/dataAssets";
 import { LuDownload, LuImage, LuLoader } from "react-icons/lu";
 
 const PreviewPanel = ({
@@ -9,23 +8,23 @@ const PreviewPanel = ({
 }: {
   thumbnail: IThumbnail | null;
   isLoading: boolean;
-  aspectRatio: string;
+  aspectRatio: IAspectRatio;
 }) => {
   const aspectClasses = {
     "16:9": "aspect-video",
     "1:1": "aspect-square",
     "9:16": "aspect-[9/16]",
-  } as Record<AspectRatio, string>;
+  } as Record<IAspectRatio, string>;
 
   const onDownload = () => {
-    if (!thumbnail || !thumbnail.image_url) return;
-    window.open(thumbnail.image_url, "_blank");
+    if (!thumbnail || !thumbnail.imageUrl) return;
+    window.open(thumbnail.imageUrl, "_blank");
   };
 
   return (
     <div className="w-full max-w-2xl mx-auto relative">
       <div
-        className={`relative overflow-hidden ${aspectClasses[aspectRatio as AspectRatio]} rounded-2xl bg-white/8 border-white/12 `}
+        className={`relative overflow-hidden ${aspectClasses[aspectRatio as IAspectRatio]} rounded-2xl bg-white/8 border-white/12 `}
       >
         {isLoading && (
           <div className="flex flex-col inset-0 absolute items-center justify-center gap-4 bg-black/25">
@@ -41,10 +40,10 @@ const PreviewPanel = ({
           </div>
         )}
 
-        {!isLoading && thumbnail?.image_url && (
+        {!isLoading && thumbnail?.imageUrl && (
           <div className="w-full h-full group relative">
             <img
-              src={thumbnail.image_url}
+              src={thumbnail.imageUrl}
               alt={thumbnail.title}
               className="w-full h-full object-cover"
             />
@@ -61,7 +60,7 @@ const PreviewPanel = ({
           </div>
         )}
 
-        {!isLoading && !thumbnail?.image_url && (
+        {!isLoading && !thumbnail?.imageUrl && (
           <div className="flex flex-col inset-0 absolute items-center justify-center gap-4 bg-black/25">
             <div className="max-sm:hidden flex size-20 items-center justify-center rounded-full bg-white/10">
               <LuImage className="size-10 text-white opacity-50" />

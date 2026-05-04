@@ -1,3 +1,5 @@
+import type { IThumbnail } from "./data/dataAssets";
+
 export interface INavLink {
   name: string;
   to: string;
@@ -53,6 +55,7 @@ export interface IFooter {
 export interface IStore {
   user: object;
   toast: IToast[];
+  thumbnailList: IThumbnail[];
 }
 
 export interface IToast {

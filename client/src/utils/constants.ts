@@ -1,1 +1,1 @@
-export const BASE_URL = location.hostname === 'localhost' ? import.meta.env.SERVER_URL : '/api';
+export const BASE_URL = location.hostname === 'localhost' ? import.meta.env.VITE_SERVER_URL : '/api';

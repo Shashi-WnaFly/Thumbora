@@ -58,10 +58,3 @@ export type IStyle =
   | "Photorealistic"
   | "Illustrated";
 
-export interface IPagination {
-  totalThumbnails: number,
-  page: number,
-  limit: number,
-  totalPages: number,
-  hasNextPage: boolean
-}

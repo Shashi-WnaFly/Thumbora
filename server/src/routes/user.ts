@@ -99,10 +99,7 @@ router.get(
     try {
       const userId = req.user._id;
       let page = Math.max(1, parseInt(req.query.page as string) || 1);
-      let limit = Math.min(
-        25,
-        Math.max(1, parseInt(req.query.limit as string) || 12),
-      );
+      const limit = 15;
       const skip = (page - 1) * limit;
 
       const [userThumbnails, totalDoc] = await Promise.all([
@@ -115,18 +112,12 @@ router.get(
       ]);
       const totalPages = Math.ceil(totalDoc / limit);
 
-      const paginationRes: IPagination = {
-        totalThumbnails: totalDoc,
-        page,
-        limit,
-        totalPages,
-        hasNextPage: page < totalPages,
-      };
-
+      const hasMore = page < totalPages;
+      
       res.json({
         success: true,
         data: userThumbnails,
-        pagination: paginationRes,
+        hasMore: hasMore,
       });
     } catch (error) {
       res

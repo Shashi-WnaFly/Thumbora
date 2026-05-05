@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { use, useCallback, useEffect, useRef, useState } from "react";
 import SoftBackdrop from "../components/SoftBackdrop";
 import type { IAspectRatio, IThumbnail } from "../data/dataAssets";
 import ThumbnailCard from "../components/ThumbnailCard";
@@ -32,8 +32,7 @@ const MyGenerations = () => {
   };
 
   const fetchThumbnails = useCallback(async () => {
-    if(fetchingRef.current || !hasMore)
-      return;
+    if (fetchingRef.current || !hasMore) return;
     try {
       setLoading(true);
       const { data } = await api.get(`/user/thumbnails?page=${page}&limit=15`);
@@ -43,26 +42,31 @@ const MyGenerations = () => {
     } catch (error) {
       console.error(error);
       showToast("error", "Failed to load thumbnails. Please try again.");
-    }
-    finally {
+    } finally {
       setLoading(false);
       fetchingRef.current = false;
     }
   }, [page, hasMore]);
 
   useEffect(() => {
-    if(!observerRef.current)
-      return;
-    const observer = new IntersectionObserver((entries) => {
-      if(entries[0].isIntersecting && hasMore) {
-        fetchThumbnails();
-      }
-    }, {threshold: 0.5});
+    fetchThumbnails();
+  }, []);
+
+  useEffect(() => {
+    if (!observerRef.current) return;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && hasMore) {
+          fetchThumbnails();
+        }
+      },
+      { threshold: 0.5 },
+    );
 
     observer.observe(observerRef.current);
 
     return () => observer.disconnect();
-    }, [fetchThumbnails, hasMore]);
+  }, [fetchThumbnails, hasMore]);
 
   return (
     <>
@@ -114,9 +118,16 @@ const MyGenerations = () => {
                 />
               </div>
             ))}
-            <div ref={observerRef} className="h-10 flex items-center justify-center col-span-full">
-              {loading && <p className="text-center text-zinc-400">Loading more...</p>}
-              {!hasMore && <p className="text-center text-zinc-400">No more thumbnails</p>}
+            <div
+              ref={observerRef}
+              className="h-10 flex items-center justify-center col-span-full"
+            >
+              {loading && (
+                <p className="text-center text-zinc-400">Loading more...</p>
+              )}
+              {!hasMore && (
+                <p className="text-center text-zinc-400">No more thumbnails</p>
+              )}
             </div>
           </div>
         )}

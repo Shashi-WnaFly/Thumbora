@@ -14,8 +14,8 @@ export const navLinks: INavLink[] = [
     to: "/my-generations",
   },
   {
-    name: "My Contact",
-    to: "/contact",
+    name: "Password Change",
+    to: "/password-change",
   },
   {
     name: "Logout",

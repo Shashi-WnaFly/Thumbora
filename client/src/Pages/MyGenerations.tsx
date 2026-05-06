@@ -33,6 +33,7 @@ const MyGenerations = () => {
 
   const fetchThumbnails = useCallback(async () => {
     if (fetchingRef.current || !hasMore) return;
+    fetchingRef.current = true;
     try {
       setLoading(true);
       const { data } = await api.get(`/user/thumbnails?page=${page}&limit=15`);

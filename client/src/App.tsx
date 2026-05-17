@@ -14,7 +14,7 @@ import YTPreview from "./Pages/YTPreview";
 import { useEffect } from "react";
 import appStore from "./utils/appStore";
 import { Provider } from "react-redux";
-import PasswordChange from "./components/PasswordChange";
+import PasswordChange from "./Pages/PasswordChange";
 
 function ScrollToTop() {
   const { pathname } = useLocation();

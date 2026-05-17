@@ -16,16 +16,17 @@ export default function Navbar() {
   const user = useSelector((store: IStore) => store.user);
   const { showToast } = useToast();
 
-  const handleAccess = async () => {
+  // bug : when we click burger icon at big screen blur effect compromised because of single state variable isMenuOpen
+
+  const handleLogout = async () => {
     try {
       if (user) {
         const { data } = await api.post("/logout");
         dispatch(removeUser());
         showToast("success", data.message);
-        navigate("/login");
-      } else {
-        navigate("/login");
       }
+      setIsMenuOpen(false);
+      navigate("/login");
     } catch (error) {
       console.log(error);
     }
@@ -46,7 +47,7 @@ export default function Navbar() {
       </div>
       <div className="hidden md:flex gap-6 text-md transition duration-500">
         {navLinks.map((link: INavLink) => {
-          if (link.name === "Logout") return;
+          if (link.name === "Logout" || link.name == "Password Change") return;
           return (
             <Link
               key={link.name}
@@ -58,12 +59,48 @@ export default function Navbar() {
           );
         })}
       </div>
-      <button
-        onClick={handleAccess}
-        className="hidden md:block bg-orange-600 text-white px-4 py-2 rounded-full hover:bg-orange-700"
-      >
-        {user ? "Log out" : "Get Started"}
-      </button>
+      <div className="relative hidden md:block transition ">
+        <button
+          onClick={() => setIsMenuOpen(!isMenuOpen)}
+          className="text-white px-4 py-2 rounded-full"
+        >
+          <MenuIcon className="active:scale-90 " size={24} />
+        </button>
+        {isMenuOpen && (
+          <div className="absolute top-10 flex flex-col text-nowrap left-auto right-0">
+            {user && (
+              <>
+                <button
+                  onClick={handleLogout}
+                  className="px-2 py-1 text-left rounded-sm hover:bg-orange-500"
+                >
+                  Logout
+                </button>
+                <button
+                  onClick={() => {
+                    setIsMenuOpen(false);
+                    navigate("/password-change");
+                  }}
+                  className="px-2 py-1 text-left rounded-sm hover:bg-orange-500"
+                >
+                  Change Password
+                </button>
+              </>
+            )}
+            {!user && (
+              <button
+                onClick={() => {
+                  setIsMenuOpen(!isMenuOpen);
+                  navigate("/login");
+                }}
+                className="px-2 py-1 text-left rounded-sm hover:bg-orange-500"
+              >
+                Login
+              </button>
+            )}
+          </div>
+        )}
+      </div>
       <button className="md:hidden" onClick={() => setIsMenuOpen(true)}>
         <MenuIcon className="active:scale-90 transition" size={24} />
       </button>

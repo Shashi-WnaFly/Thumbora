@@ -1,4 +1,4 @@
-import React, { use, useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import SoftBackdrop from "../components/SoftBackdrop";
 import type { IAspectRatio, IThumbnail } from "../data/dataAssets";
 import ThumbnailCard from "../components/ThumbnailCard";

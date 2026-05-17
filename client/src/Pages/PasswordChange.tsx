@@ -1,20 +1,26 @@
-import { useState } from "react";
-import SoftBackdrop from "./SoftBackdrop";
+import { useState, type ChangeEvent } from "react";
+import SoftBackdrop from "../components/SoftBackdrop";
+
+interface IFormData {
+  "oldPassword": string;
+  "newPassword": string;
+  "confirmPassword": string;
+}
 
 const App = () => {
 
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<IFormData>({
     oldPassword: "",
     newPassword: "",
     confirmPassword: "",
   });
 
-  const handleChange = (e) => {
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: ChangeEvent<HTMLFormElement>) => {
     e.preventDefault();
   };
 

@@ -113,7 +113,7 @@ router.get(
       const totalPages = Math.ceil(totalDoc / limit);
 
       const hasMore = page < totalPages;
-      
+
       res.json({
         success: true,
         data: userThumbnails,
@@ -133,7 +133,7 @@ router.delete(
   async (req: Request, res: Response) => {
     try {
       const { thumbId } = req.params;
-      await Thumbnail.findByIdAndDelete(thumbId);
+      await Thumbnail.findOneAndDelete({ _id: thumbId, userId: req.user._id });
 
       res.json({ success: true, message: "Thumbnail successfully deleted." });
     } catch (error) {

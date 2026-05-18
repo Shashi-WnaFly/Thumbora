@@ -42,7 +42,7 @@ export default function FeaturesSection() {
               alt="feature showcase"
               height={500}
               width={1000}
-              className="h-full w-auto "
+              className="h-full w-auto object-cover"
             />
           </div>
           <div className="md:col-span-1 flex flex-col items-center gap-8">

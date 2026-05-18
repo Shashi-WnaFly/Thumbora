@@ -20,11 +20,10 @@ export default function Navbar() {
 
   const handleLogout = async () => {
     try {
-      if (user) {
-        const { data } = await api.post("/logout");
-        dispatch(removeUser());
-        showToast("success", data.message);
-      }
+      const { data } = await api.post("/logout");
+      dispatch(removeUser());
+      showToast("success", data.message);
+
       setIsMenuOpen(false);
       navigate("/login");
     } catch (error) {
@@ -62,12 +61,12 @@ export default function Navbar() {
       <div className="relative hidden md:block transition ">
         <button
           onClick={() => setIsMenuOpen(!isMenuOpen)}
-          className="text-white px-4 py-2 rounded-full"
+          className="text-white p-1"
         >
           <MenuIcon className="active:scale-90 " size={24} />
         </button>
         {isMenuOpen && (
-          <div className="absolute top-10 flex flex-col text-nowrap left-auto right-0">
+          <div className=" absolute w-36 top-10 flex flex-col text-nowrap left-auto right-0">
             {user && (
               <>
                 <button
@@ -81,7 +80,7 @@ export default function Navbar() {
                     setIsMenuOpen(false);
                     navigate("/password-change");
                   }}
-                  className="px-2 py-1 text-left rounded-sm hover:bg-orange-500"
+                  className="px-2 py-1 text-left mt-0.5 rounded-sm hover:bg-orange-500"
                 >
                   Change Password
                 </button>

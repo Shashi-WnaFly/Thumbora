@@ -64,3 +64,9 @@ export interface IToast {
   message: string;
   timeout?: ReturnType<typeof setTimeout>;
 }
+
+export interface apiResponse {
+  success: boolean;
+  data?: object;
+  message?: string;
+}

@@ -3,7 +3,7 @@ import Logo from "../../public/assets/Logo";
 import { navLinks } from "../data/navLinks";
 import type { INavLink, IStore } from "../types";
 import { Link, useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import api from "../configs/api";
 import { removeUser } from "../utils/userSlice";
@@ -31,12 +31,24 @@ export default function Navbar() {
     }
   };
 
+  useEffect(() => {
+    const closeMenu = async () => {
+      setIsMenuOpen(false);
+      console.log("Menu closed");
+    };
+
+    closeMenu();
+  }, [user]);
+
   return (
     <div
       className={` h-18 w-full top-0 fixed z-30 flex justify-between items-center px-6 md:px-16 lg:px-24 xl:px-32 ${!isMenuOpen && "backdrop-blur"}`}
     >
       <div
-        onClick={() => navigate("/")}
+        onClick={() => {
+          setIsMenuOpen(false);
+          navigate("/");
+        }}
         className="flex items-center cursor-pointer"
       >
         <div className="w-10 h-10 p-2">
@@ -49,6 +61,7 @@ export default function Navbar() {
           if (link.name === "Logout" || link.name == "Password Change") return;
           return (
             <Link
+              onClick={() => setIsMenuOpen(false)}
               key={link.name}
               to={link.to}
               className="border-b-4 border-transparent hover:border-orange-600 transition active:text-orange-500 duration-300"
@@ -66,7 +79,7 @@ export default function Navbar() {
           <MenuIcon className="active:scale-90 " size={24} />
         </button>
         {isMenuOpen && (
-          <div className=" absolute w-36 top-10 flex flex-col text-nowrap left-auto right-0">
+          <div className="backdrop-blur-sm absolute w-36 top-10 flex flex-col text-nowrap left-auto right-0">
             {user && (
               <>
                 <button

@@ -1,14 +1,18 @@
 import { useState, type ChangeEvent } from "react";
 import SoftBackdrop from "../components/SoftBackdrop";
+import { isStrongPassword } from "validator";
+import useToast from "../hooks/useToast";
+import api from "../configs/api";
+import type { apiResponse } from "../types";
 
 interface IFormData {
-  "oldPassword": string;
-  "newPassword": string;
-  "confirmPassword": string;
+  oldPassword: string;
+  newPassword: string;
+  confirmPassword: string;
 }
 
 const App = () => {
-
+  const { showToast } = useToast();
   const [formData, setFormData] = useState<IFormData>({
     oldPassword: "",
     newPassword: "",
@@ -20,8 +24,48 @@ const App = () => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e: ChangeEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const handleSubmit = async (e: ChangeEvent<HTMLFormElement>) => {
+    try {
+      e.preventDefault();
+      const { oldPassword, newPassword, confirmPassword } = formData;
+      if (
+        !oldPassword ||
+        !newPassword ||
+        !confirmPassword ||
+        !isStrongPassword(oldPassword) ||
+        !isStrongPassword(newPassword) ||
+        !isStrongPassword(confirmPassword)
+      ) {
+        showToast("error", "Credentials are invalid!");
+        return;
+      }
+      if (newPassword !== confirmPassword) {
+        showToast("error", "Credentials are invalid!");
+        return;
+      }
+
+      const res = await api.patch("/profile/password/change", {
+        prePassword: oldPassword,
+        newPassword,
+      });
+
+      const data = res.data as apiResponse;
+      if (!data) throw new Error("No response from server!");
+
+      showToast(
+        data.success ? "success" : "error",
+        data.message || "Response is there!",
+      );
+      setFormData((prev) => ({
+        ...prev,
+        confirmPassword: "",
+        oldPassword: "",
+        newPassword: "",
+      }));
+    } catch (error) {
+      console.log((error as Error).message);
+      showToast("error", "something went wrong!");
+    }
   };
 
   return (

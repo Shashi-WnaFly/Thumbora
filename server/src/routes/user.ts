@@ -2,10 +2,8 @@ import express, { Request, Response } from "express";
 import { userAuth } from "../middleware/auth.js";
 import Thumbnail from "../models/Thumbnail.js";
 import { colorSchemeDescriptions, stylePrompts } from "../utils/constants.js";
-import { IColor, IPagination, IStyle } from "../types/types.js";
+import { IColor, IStyle } from "../types/types.js";
 import ai, { generateConfig } from "../config/ai.js";
-import path from "node:path";
-import fs from "node:fs";
 import { v2 as cloudinary } from "cloudinary";
 
 const router = express.Router();
@@ -14,6 +12,7 @@ router.post(
   "/user/generate/thumbnail",
   userAuth,
   async (req: Request, res: Response) => {
+    let thumbnail: any = null;
     try {
       const {
         title,
@@ -24,7 +23,7 @@ router.post(
         textOverlay,
       } = req.body;
       const userId = req.body.user._id;
-      const thumbnail = await Thumbnail.create({
+      thumbnail = await Thumbnail.create({
         userId,
         title,
         userPrompt,
@@ -52,42 +51,74 @@ router.post(
 
       prompt += `The thumbnail should be ${aspectRatio}, visually stunning, and designed to maximize click-through rate. Make it bold, professional and impossible to ignore.`;
 
-      const response: any = ai.models.generateContent({
+      const response: any = await ai.models.generateContent({
         model,
         contents: [prompt],
         config: generatingConfig,
       });
 
-      if (!response?.candidates[0]?.content?.parts)
-        throw new Error("Unexpected response");
+      const parts = response?.candidates[0]?.content?.parts;
 
-      const parts = response.candidates[0].content.parts;
+      if (!parts) throw new Error("Unexpected response");
 
-      let finalBuffer: Buffer | null = null;
+      let imageBuffer: Buffer | null = null;
 
       for (const part of parts) {
         if (part.inlineData)
-          finalBuffer = Buffer.from(part.inlineData.data, "base64");
+          imageBuffer = Buffer.from(part.inlineData.data, "base64");
       }
 
-      const fileName = `final-output-${Date.now()}.png`;
-      const filePath = path.join("images", fileName);
-
-      fs.mkdirSync("images", { recursive: true });
-      fs.writeFileSync(filePath, finalBuffer!);
-
-      const uploadRes = await cloudinary.uploader.upload(filePath, {
-        resource_type: "image",
+      // Upload directly from memory buffer to Cloudinary
+      const uploadRes = await new Promise<any>((resolve, reject) => {
+        const stream = cloudinary.uploader.upload_stream(
+          {
+            folder: "thumbnails",
+            resource_type: "image",
+          },
+          (error, result) => {
+            if (error) return reject(error);
+            resolve(result);
+          },
+        );
+        stream.end(imageBuffer);
       });
 
-      thumbnail.imageUrl = uploadRes.url;
+      thumbnail.imageUrl = uploadRes.secure_url;
       thumbnail.isGenerating = false;
 
       await thumbnail.save();
-      res.json({ success: true, data: thumbnail });
-      fs.unlinkSync(filePath);
+
+      return res.status(201).json({
+        success: true,
+        data: thumbnail,
+      });
+
+      // const fileName = `final-output-${Date.now()}.png`;
+      // const filePath = path.join("images", fileName);
+
+      // fs.mkdirSync("images", { recursive: true });
+      // fs.writeFileSync(filePath, finalBuffer!);
+
+      // const uploadRes = await cloudinary.uploader.upload(filePath, {
+      //   resource_type: "image",
+      // });
+
+      // thumbnail.imageUrl = uploadRes.url;
+      // thumbnail.isGenerating = false;
+
+      // await thumbnail.save();
+      // res.json({ success: true, data: thumbnail });
+      // fs.unlinkSync(filePath);
     } catch (error) {
-      res.json({ success: false, message: (error as Error).message });
+      console.error(error);
+
+      if (thumbnail) {
+        thumbnail.isGenerating = false;
+        await thumbnail.save();
+      }
+      return res
+        .status(500)
+        .json({ success: false, message: (error as Error).message });
     }
   },
 );

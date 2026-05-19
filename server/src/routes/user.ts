@@ -92,23 +92,7 @@ router.post(
         success: true,
         data: thumbnail,
       });
-
-      // const fileName = `final-output-${Date.now()}.png`;
-      // const filePath = path.join("images", fileName);
-
-      // fs.mkdirSync("images", { recursive: true });
-      // fs.writeFileSync(filePath, finalBuffer!);
-
-      // const uploadRes = await cloudinary.uploader.upload(filePath, {
-      //   resource_type: "image",
-      // });
-
-      // thumbnail.imageUrl = uploadRes.url;
-      // thumbnail.isGenerating = false;
-
-      // await thumbnail.save();
-      // res.json({ success: true, data: thumbnail });
-      // fs.unlinkSync(filePath);
+      
     } catch (error) {
       console.error(error);
 

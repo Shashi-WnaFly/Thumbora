@@ -43,7 +43,9 @@ const Generate = () => {
   const [additionalInfo, setAdditionalInfo] = useState<string>(
     curThumbnail?.userPrompt || "",
   );
-  const [loading, setLoading] = useState<boolean>(curThumbnail?.isGenerating || false);
+  const [loading, setLoading] = useState<boolean>(
+    curThumbnail?.isGenerating || false,
+  );
   const { showToast } = useToast();
 
   useEffect(() => {
@@ -52,14 +54,15 @@ const Generate = () => {
 
   const fetchThumbnail = async () => {
     try {
-      setLoading(true);
+      if (loading) return;
       if (!title.trim()) {
-        setLoading(false);
         showToast("warning", "Fill the title fields!!");
         return;
       }
 
-      const thmbnail = await api.post(`/user/generate/thumbnail`, {
+      setLoading(true);
+
+      const { data } = await api.post(`/user/generate/thumbnail`, {
         title,
         prompt: additionalInfo,
         style,
@@ -67,22 +70,21 @@ const Generate = () => {
         colorScheme,
         textOverlay: true,
       });
-      dispatch(unShiftThumbnail(thmbnail.data));
-      navigate(`/generate/${thmbnail.data._id}`);
+
+      if (!data.success) throw new Error(data.message);
+
+      dispatch(unShiftThumbnail(data.data));
+      navigate(`/generate/${data.data._id}`);
     } catch (error) {
-      console.log(error);
-      showToast("error", (error as Error).message);
+      console.error(error);
+      showToast(
+        "error",
+        error instanceof Error ? error.message : "Failed to generate thumbnail",
+      );
+    } finally {
+      setLoading(false);
     }
   };
-
-  useEffect(() => {
-    if (user && loading) {
-      const interval = setInterval(() => {
-        fetchThumbnail();
-      }, 10000);
-      return () => clearInterval(interval);
-    }
-  }, [user, loading]);
 
   return (
     <div className="pt-19 min-h-screen">

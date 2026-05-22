@@ -15,6 +15,7 @@ import { useEffect } from "react";
 import appStore from "./utils/appStore";
 import { Provider } from "react-redux";
 import PasswordChange from "./Pages/PasswordChange";
+import PasswordReset from "./Pages/PasswordReset";
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -56,6 +57,10 @@ const router = createBrowserRouter([
           {
             path: "/preview",
             element: <YTPreview />,
+          },
+          {
+            path: "/user/password/reset",
+            element: <PasswordReset />,
           },
         ],
       },

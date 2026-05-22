@@ -3,7 +3,7 @@ import Logo from "../../public/assets/Logo";
 import { navLinks } from "../data/navLinks";
 import type { INavLink, IStore } from "../types";
 import { Link, useNavigate } from "react-router-dom";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import api from "../configs/api";
 import { removeUser } from "../utils/userSlice";
@@ -100,15 +100,26 @@ export default function Navbar() {
               </>
             )}
             {!user && (
-              <button
-                onClick={() => {
-                  setIsMenuOpen(!isMenuOpen);
-                  navigate("/login");
-                }}
-                className="px-2 py-1 text-left rounded-sm hover:bg-orange-500"
-              >
-                Login
-              </button>
+              <>
+                <button
+                  onClick={() => {
+                    setIsMenuOpen(!isMenuOpen);
+                    navigate("/login");
+                  }}
+                  className="px-2 py-1 text-left rounded-sm hover:bg-orange-500"
+                >
+                  Login
+                </button>
+                <button
+                  onClick={() => {
+                    setIsMenuOpen(!isMenuOpen);
+                    navigate("/user/password/reset");
+                  }}
+                  className="px-2 py-1 text-left rounded-sm hover:bg-orange-500"
+                >
+                  Password Reset
+                </button>
+              </>
             )}
           </div>
         )}

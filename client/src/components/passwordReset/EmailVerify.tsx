@@ -105,7 +105,7 @@ const EmailVerify = ({
           </p>
           <button
             className="text-orange-400 text-center w-full rounded-full active:underline md:hover:bg-amber-600 md:hover:text-white p-2 text-sm"
-            onClick={handleEmailSubmit}
+            onClick={() => handleEmailSubmit()}
           >
             Resend
           </button>

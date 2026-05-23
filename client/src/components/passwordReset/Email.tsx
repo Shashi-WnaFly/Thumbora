@@ -7,11 +7,15 @@ const Email = ({
 }: {
   value: string;
   onChange: (email: string) => void;
-  handleEmailSubmit: (e: React.ChangeEvent<HTMLFormElement>) => void;
+  handleEmailSubmit: () => void;
 }) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    handleEmailSubmit();
+  };
   return (
     <form
-      onSubmit={handleEmailSubmit}
+      onSubmit={handleSubmit}
       className="w-full sm:w-87.5 text-center bg-white/6 border border-white/10 rounded-2xl px-8"
     >
       <h1 className="text-white text-3xl mt-10 font-medium">Password Reset</h1>

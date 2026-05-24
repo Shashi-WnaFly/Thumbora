@@ -8,12 +8,10 @@ import validator from "validator";
 import useToast from "../../hooks/useToast";
 
 const EmailVerify = ({
-  fillOTP,
   handleOTPSubmit,
   handleEmailSubmit,
 }: {
-  fillOTP: (otp: string) => void;
-  handleOTPSubmit: () => void;
+  handleOTPSubmit: (otp: string) => void;
   handleEmailSubmit: () => void;
 }) => {
   const inputRefs = useRef<Array<HTMLInputElement>>([]);
@@ -53,13 +51,14 @@ const EmailVerify = ({
       inputRefs.current[index - 1].focus();
   };
 
-  const handleOTP = () => {
+  const handleSubmit = (e: ChangeEvent<HTMLFormElement>) => {
+    e.preventDefault();
     const otp = inputRefs.current.map((input) => input.value).join("");
     if (otp.length < 6) {
       showToast("error", "Please enter a valid 6-digit OTP.");
       return;
     }
-    fillOTP(otp);
+    handleOTPSubmit(otp);
   };
 
   return (
@@ -68,18 +67,14 @@ const EmailVerify = ({
       <p className="mt-2 text-sm text-gray-400 text-center">
         Enter the 6-digit code sent to your email ID.
       </p>
-      <form
-        onSubmit={() => {
-          handleOTP();
-          handleOTPSubmit();
-        }}
-      >
+      <form onSubmit={(e) => handleSubmit(e)}>
         <div
           className="grid grid-cols-6 gap-2 mt-8"
           onPaste={(e) => handlePaste(e)}
         >
           {[0, 0, 0, 0, 0, 0].map((_, index) => (
             <input
+              key={index}
               type="text"
               inputMode="numeric"
               pattern="[0-9]*"
@@ -89,7 +84,7 @@ const EmailVerify = ({
               }}
               onChange={(e) => handleInput({ e, index })}
               onKeyDown={(e) => handleKeyDown({ e, index })}
-              className="w-full h-12 bg-orange-50 text-gray-900 text-xl rounded-md outline-none text-center"
+              className="w-full h-12 bg-orange-200/30 text-white text-xl rounded-md outline-none text-center"
             />
           ))}
         </div>

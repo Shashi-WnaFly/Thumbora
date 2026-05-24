@@ -1,4 +1,4 @@
-import React from "react";
+import { type ChangeEvent } from "react";
 
 const Email = ({
   value,
@@ -9,7 +9,7 @@ const Email = ({
   onChange: (email: string) => void;
   handleEmailSubmit: () => void;
 }) => {
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (e: ChangeEvent<HTMLFormElement>) => {
     e.preventDefault();
     handleEmailSubmit();
   };

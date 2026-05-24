@@ -11,7 +11,7 @@ interface IFormData {
   confirmPassword: string;
 }
 
-const App = () => {
+const PasswordUpdate = () => {
   const { showToast } = useToast();
   const [formData, setFormData] = useState<IFormData>({
     oldPassword: "",
@@ -75,10 +75,12 @@ const App = () => {
         className="mx-auto sm:w-87.5 text-center bg-white/6 border border-white/10 rounded-2xl px-8"
       >
         <h1 className="text-white text-3xl mt-10 font-medium">
-          Password Reset
+          Update Password
         </h1>
 
-        <p className="text-gray-400 text-sm mt-2">Reset Your Password</p>
+        <p className="text-gray-400 text-sm mt-2">
+          Please enter your new password
+        </p>
 
         <div className="flex items-center mt-6 w-full bg-white/5 ring-2 ring-white/10 focus-within:ring-orange-500/60 h-12 rounded-full overflow-hidden pl-6 gap-2 transition-all ">
           <svg
@@ -175,4 +177,4 @@ const App = () => {
   );
 };
 
-export default App;
+export default PasswordUpdate;

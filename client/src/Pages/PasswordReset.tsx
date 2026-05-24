@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import SoftBackdrop from "../components/SoftBackdrop";
 import Email from "../components/passwordReset/Email";
 import EmailVerify from "../components/passwordReset/EmailVerify";

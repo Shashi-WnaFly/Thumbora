@@ -91,7 +91,7 @@ export default function Navbar() {
                 <button
                   onClick={() => {
                     setIsMenuOpen(false);
-                    navigate("/password-change");
+                    navigate("/password/update");
                   }}
                   className="px-2 py-1 text-left mt-0.5 rounded-sm hover:bg-orange-500"
                 >

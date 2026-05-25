@@ -1,6 +1,8 @@
 import express, { Request, Response } from "express";
 import User from "../models/User.js";
-const Crypto = await import("crypto");
+import { PASSWORD_RESET_TEMPLATE } from "../utils/constants.js";
+import emailTransporter from "../config/emailTransporter.js";
+const crypto = await import("crypto");
 
 const router = express.Router();
 
@@ -12,12 +14,25 @@ router.post("/verify/reset/email", async (req: Request, res: Response) => {
       return res
         .status(400)
         .json({ success: false, message: "Credentials are invalid!" });
-    const otp = Crypto.randomInt(100001, 999999).toString();
+    const otp = crypto.randomInt(100001, 999999).toString();
     user.verifyOtp = otp;
     user.otpExpireAt = new Date(Date.now() + 10 * 60 * 1000);
 
-    // TODO: Send OTP to user's email using a mail service like nodemailer
-    user.save();
+    const emailTemplate = PASSWORD_RESET_TEMPLATE.replace(
+      "{{otp}}",
+      otp,
+    ).replace("{{email}}", emailId);
+    const sub = "Thumbora Password Reset OTP";
+    const options = {
+      to: emailId,
+      from: process.env.SENDER_EMAIL,
+      subject: sub,
+      html: emailTemplate,
+    };
+
+    await emailTransporter.sendMail(options);
+    await user.save();
+
     res.status(200).json({
       success: true,
       message: "OTP has been sent to your email for verification.",

@@ -154,11 +154,13 @@ const Login = () => {
             />
           </div>
 
-          <div className="mt-4 text-left">
-            <button className="text-sm text-orange-400 hover:underline">
-              Forget password?
-            </button>
-          </div>
+          {state === "login" && (
+            <div className="mt-4 text-left">
+              <button onClick={() => navigate("/user/password/reset")} className="text-sm text-orange-400 hover:underline">
+                Forget password?
+              </button>
+            </div>
+          )}
 
           <button
             type="submit"

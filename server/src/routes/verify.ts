@@ -7,7 +7,7 @@ import validator from "validator";
 
 const router = express.Router();
 
-router.post("/verify/reset/email", async (req: Request, res: Response) => {
+router.post("/verify/email/reset", async (req: Request, res: Response) => {
   try {
     // TODO: implement rate limiting using redis
     const { emailId } = req.body;

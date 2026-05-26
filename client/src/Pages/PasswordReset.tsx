@@ -1,17 +1,32 @@
 import { useState } from "react";
+import validator from "validator";
 import SoftBackdrop from "../components/SoftBackdrop";
 import Email from "../components/passwordReset/Email";
 import EmailVerify from "../components/passwordReset/EmailVerify";
 import ChangePassword from "../components/passwordReset/ChangePassword";
+import useToast from "../hooks/useToast";
+import api from "../configs/api";
 
 const PasswordReset = () => {
   const [email, setEmail] = useState("");
   const [isOTPSend, setIsOTPSend] = useState(false);
   const [isOTPVerified, setIsOTPVerified] = useState(false);
+  const { showToast } = useToast();
 
-  const handleEmailSubmit = () => {
-    console.log("Email submitted:", email);
-    setIsOTPSend(true);
+  const handleEmailSubmit = async () => {
+    try {
+      const emailId = email.trim().toLowerCase();
+      if (!emailId || !validator.isEmail(emailId)) {
+        showToast("error", "Enter a valid email address.");
+        return;
+      }
+      const data = await api.post("/verify/email/reset", { emailId: emailId });
+      const response = data.data.success ? "success" : "error";
+      showToast(response, data.data.message);
+      setIsOTPSend(true);
+    } catch (error) {
+      console.error(error);
+    }
   };
   const handleOTPSubmit = (otp: string) => {
     console.log(otp);

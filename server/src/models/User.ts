@@ -49,6 +49,10 @@ const userSchema = new Schema<IUser>(
       minLength: 6,
       maxLength: 6,
     },
+    otpAttempts: {
+      type: Number,
+      default: 0,
+    },
     otpExpireAt: {
       type: Date,
       default: null,

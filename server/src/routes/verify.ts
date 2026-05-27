@@ -31,7 +31,7 @@ router.post("/verify/email/reset", async (req: Request, res: Response) => {
       user.otpExpireAt &&
       user.otpExpireAt > new Date(Date.now() - 2 * 60 * 1000)
     )
-      res.status(200).json({
+      return res.status(200).json({
         success: true,
         message: "OTP already sent. Please wait before requesting again.",
       });

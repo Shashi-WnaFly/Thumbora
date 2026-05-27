@@ -16,21 +16,46 @@ const PasswordReset = () => {
   const handleEmailSubmit = async () => {
     try {
       const emailId = email.trim().toLowerCase();
+
       if (!emailId || !validator.isEmail(emailId)) {
         showToast("error", "Enter a valid email address.");
         return;
       }
+
       const data = await api.post("/verify/email/reset", { emailId: emailId });
-      const response = data.data.success ? "success" : "error";
-      showToast(response, data.data.message);
+
+      showToast("success", data.data.message);
       setIsOTPSend(true);
     } catch (error) {
       console.error(error);
+      showToast("error", (error as Error).message);
     }
   };
-  const handleOTPSubmit = (otp: string) => {
-    console.log(otp);
-    setIsOTPVerified(true);
+  const handleOTPSubmit = async (otp: string) => {
+    try {
+      const emailId = email.trim().toLowerCase();
+
+      if (!emailId || !validator.isEmail(emailId)) {
+        showToast("warning", "Enter valid email address.");
+        return;
+      }
+
+      if (otp.length < 6) {
+        showToast("warning", "Enter valid OTP.");
+        return;
+      }
+
+      const data = await api.post("/verify/otp/reset", {
+        emailId: emailId,
+        otp: otp,
+      });
+      showToast("success", data.data.message);
+
+      setIsOTPVerified(true);
+    } catch (error) {
+      console.error(error);
+      showToast("error", (error as Error).message);
+    }
   };
 
   return (

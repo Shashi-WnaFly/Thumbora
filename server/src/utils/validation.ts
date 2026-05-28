@@ -1,5 +1,4 @@
 import validator from "validator";
-import { Request } from "express";
 
 const signUpValidation = ({
   userName,

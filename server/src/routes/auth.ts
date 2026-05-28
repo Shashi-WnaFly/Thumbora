@@ -9,15 +9,23 @@ const router = express.Router();
 
 router.post("/signup", async (req: Request, res: Response) => {
   try {
-    let { userName, password, emailId } = req.body;
-    password = password.trim();
-    emailId = emailId.trim().toLowerCase();
-    userName = userName.trim();
-    signUpValidation({ userName, password, emailId });
+    const { userName, password, emailId } = req.body;
+    const normalizedPassword = password.trim();
+    const normalizedEmailId = emailId.trim().toLowerCase();
+    const normalizedUserName = userName.trim();
+    signUpValidation({
+      userName: normalizedUserName,
+      password: normalizedPassword,
+      emailId: normalizedEmailId,
+    });
 
-    const hashPass = await bcrypt.hash(password, 10);
+    const hashPass = await bcrypt.hash(normalizedPassword, 10);
 
-    const user = new User({ userName, password: hashPass, emailId });
+    const user = new User({
+      userName: normalizedUserName,
+      password: hashPass,
+      emailId: normalizedEmailId,
+    });
 
     const signUpUser = await user.save();
 
@@ -29,7 +37,6 @@ router.post("/signup", async (req: Request, res: Response) => {
 
     req.user = signUpUser;
     res.status(200).json({ success: true, data: safeUser(signUpUser) });
-    
   } catch (error) {
     res.status(400).json({ success: false, message: (error as Error).message });
   }
@@ -38,33 +45,44 @@ router.post("/signup", async (req: Request, res: Response) => {
 router.post("/login", async (req: Request, res: Response) => {
   try {
     const { emailId, password } = req.body;
+    const normalizedEmailId = emailId.trim().toLowerCase();
+    const normalizedPassword = password.trim();
     if (
-      !emailId ||
-      !validator.isEmail(emailId) ||
-      password.length < 8 ||
-      !validator.isStrongPassword(password)
+      !normalizedEmailId ||
+      !validator.isEmail(normalizedEmailId) ||
+      normalizedPassword.length < 8 ||
+      !validator.isStrongPassword(normalizedPassword, {
+        minLength: 8,
+        minLowercase: 1,
+        minUppercase: 1,
+        minNumbers: 1,
+        minSymbols: 1,
+      })
     )
       return res
         .status(400)
-        .json({ success: false, message: "Credentials are Invalid!" });
+        .json({ success: false, message: "Credentials are invalid!" });
 
-    const loggedUser = await User.findOne({ emailId: emailId });
+    const loggedUser = await User.findOne({ emailId: normalizedEmailId });
     if (!loggedUser)
       return res
         .status(400)
-        .json({ success: false, message: "user not found!" });
+        .json({ success: false, message: "Credentials are invalid!" });
 
-    const isPassValid = await bcrypt.compare(password, loggedUser.password);
+    const isPassValid = await bcrypt.compare(
+      normalizedPassword,
+      loggedUser.password,
+    );
 
     if (!isPassValid)
       return res
         .status(400)
-        .json({ success: false, message: "Credentials are Invalid!" });
+        .json({ success: false, message: "Credentials are invalid!" });
 
     const token = await loggedUser.getJWT();
 
     res.cookie("token", token, {
-      expires: new Date(Date.now() + 1000 * 60 * 60 * 24),
+      expires: new Date(Date.now() + 24 * 60 * 60 * 1000),
     });
     req.user = loggedUser;
     res.json({ success: true, data: safeUser(loggedUser) });

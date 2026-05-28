@@ -1,12 +1,15 @@
 import validator from "validator";
-import {Request} from "express";
+import { Request } from "express";
 
-const signUpValidation = (req: Request) => {
-  let { userName, password, emailId } = req.body;
-  userName = userName.trim();
-  emailId = emailId.trim();
-  password = password.trim();
-
+const signUpValidation = ({
+  userName,
+  password,
+  emailId,
+}: {
+  userName: string;
+  password: string;
+  emailId: string;
+}) => {
   if (
     !userName ||
     userName.length < 3 ||
@@ -18,10 +21,17 @@ const signUpValidation = (req: Request) => {
     !password ||
     password.length < 8 ||
     password.length > 20 ||
-    !validator.isStrongPassword(password)
+    !validator.isStrongPassword(password, {
+      minLength: 8,
+      minLowercase: 1,
+      minUppercase: 1,
+      minNumbers: 1,
+      minSymbols: 1,
+    })
   )
     throw new Error("Password is invalid!");
-  if (!emailId || !validator.isEmail(emailId)) throw new Error("Email is invalid!");
+  if (!emailId || !validator.isEmail(emailId))
+    throw new Error("Email is invalid!");
 };
 
 export { signUpValidation };

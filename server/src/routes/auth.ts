@@ -10,8 +10,10 @@ const router = express.Router();
 router.post("/signup", async (req: Request, res: Response) => {
   try {
     let { userName, password, emailId } = req.body;
-    signUpValidation(req);
     password = password.trim();
+    emailId = emailId.trim().toLowerCase();
+    userName = userName.trim();
+    signUpValidation({ userName, password, emailId });
 
     const hashPass = await bcrypt.hash(password, 10);
 
@@ -22,10 +24,12 @@ router.post("/signup", async (req: Request, res: Response) => {
     const token = await signUpUser.getJWT();
 
     res.cookie("token", token, {
-      expires: new Date(Date.now() + 1000 * 60 * 60 * 24),
+      expires: new Date(Date.now() + 24 * 60 * 60 * 1000),
     });
+
     req.user = signUpUser;
     res.status(200).json({ success: true, data: safeUser(signUpUser) });
+    
   } catch (error) {
     res.status(400).json({ success: false, message: (error as Error).message });
   }

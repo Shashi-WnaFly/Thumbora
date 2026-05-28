@@ -10,9 +10,9 @@ const router = express.Router();
 router.post("/signup", async (req: Request, res: Response) => {
   try {
     const { userName, password, emailId } = req.body;
-    const normalizedPassword = password.trim();
-    const normalizedEmailId = emailId.trim().toLowerCase();
-    const normalizedUserName = userName.trim();
+    const normalizedPassword = password ? password.trim() : "";
+    const normalizedEmailId = emailId ? emailId.trim().toLowerCase() : "";
+    const normalizedUserName = userName ? userName.trim() : "";
     signUpValidation({
       userName: normalizedUserName,
       password: normalizedPassword,
@@ -45,11 +45,12 @@ router.post("/signup", async (req: Request, res: Response) => {
 router.post("/login", async (req: Request, res: Response) => {
   try {
     const { emailId, password } = req.body;
-    const normalizedEmailId = emailId.trim().toLowerCase();
-    const normalizedPassword = password.trim();
+    const normalizedEmailId = emailId ? emailId.trim().toLowerCase() : "";
+    const normalizedPassword = password ? password.trim() : "";
     if (
       !normalizedEmailId ||
       !validator.isEmail(normalizedEmailId) ||
+      !normalizedPassword ||
       normalizedPassword.length < 8 ||
       !validator.isStrongPassword(normalizedPassword, {
         minLength: 8,

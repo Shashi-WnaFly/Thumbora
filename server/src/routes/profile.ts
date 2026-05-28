@@ -1,6 +1,5 @@
 import express, { Request, Response } from "express";
 import { userAuth } from "../middleware/auth.js";
-import { ISafeUser, IUser } from "../types/types.js";
 import { ALLOWED_USER_EDITS } from "../utils/constants.js";
 import validator from "validator";
 import bcrypt from "bcrypt";
@@ -28,7 +27,11 @@ router.patch("/profile/edit", userAuth, async (req: Request, res: Response) => {
 
     const updatedUser = await loggedUser.save();
     req.user = updatedUser;
-    res.json({ success: true, message: "Profile edit successfully." });
+    res.json({
+      success: true,
+      data: safeUser(updatedUser),
+      message: "Profile edit successfully.",
+    });
   } catch (error) {
     res.json({ success: false, message: (error as Error).message });
   }
@@ -40,24 +43,38 @@ router.patch(
   async (req: Request, res: Response) => {
     try {
       const { prePassword, newPassword } = req.body;
-
+      const normalizedPrePassword = prePassword ? prePassword.trim() : "";
+      const normalizedNewPassword = newPassword ? newPassword.trim() : "";
       if (
-        !prePassword ||
-        !newPassword ||
-        !validator.isStrongPassword(prePassword) ||
-        !validator.isStrongPassword(newPassword)
+        !normalizedPrePassword ||
+        !normalizedNewPassword ||
+        !(normalizedNewPassword.length >= 8) ||
+        !validator.isStrongPassword(normalizedNewPassword, {
+          minLength: 8,
+          minLowercase: 1,
+          minUppercase: 1,
+          minNumbers: 1,
+          minSymbols: 1,
+        })
       )
-        throw new Error("Credentials are Invalid!!");
+        throw new Error("Credentials are invalid!!");
 
       const user = req.user;
-      const isMatch = await bcrypt.compare(prePassword, user.password);
+      const isMatch = await bcrypt.compare(
+        normalizedPrePassword,
+        user.password,
+      );
 
-      if (!isMatch) throw new Error("Credentials are Invalid!!");
+      if (!isMatch) throw new Error("Credentials are invalid!!");
 
-      const newPassHash = await bcrypt.hash(newPassword, 10);
+      const newPassHash = await bcrypt.hash(normalizedNewPassword, 10);
       user.password = newPassHash;
       await user.save();
-      res.json({ success: true, message: "Password changed successfully." });
+      res.json({
+        success: true,
+        data: safeUser(user),
+        message: "Password changed successfully.",
+      });
     } catch (error) {
       res.json({ success: false, message: (error as Error).message });
     }

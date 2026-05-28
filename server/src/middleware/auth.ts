@@ -1,4 +1,4 @@
-import express, { NextFunction, Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import User from "../models/User.js";
 import jwt, { JwtPayload } from "jsonwebtoken";
 
@@ -6,13 +6,13 @@ const userAuth = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { token } = req.cookies;
 
-    if (!token) throw new Error("Credentials are Invalid!!");
+    if (!token) throw new Error("Credentials are invalid!!");
 
     const { userId } = jwt.verify(token, process.env.JWT_SECRET!) as JwtPayload;
 
     const user = await User.findById(userId);
 
-    if (!user) throw new Error("user not found!!");
+    if (!user) throw new Error("Credentials are invalid!!");
 
     req.user = user;
 

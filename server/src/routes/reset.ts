@@ -4,10 +4,11 @@ import { PASSWORD_RESET_TEMPLATE } from "../utils/constants.js";
 import emailTransporter from "../config/emailTransporter.js";
 import { randomInt, createHash, timingSafeEqual } from "crypto";
 import validator from "validator";
+import bcrypt from "bcrypt";
 
 const router = express.Router();
 
-router.post("/verify/email/reset", async (req: Request, res: Response) => {
+router.post("/reset/verify/email", async (req: Request, res: Response) => {
   try {
     // TODO: implement rate limiting using redis
     const { emailId } = req.body;
@@ -64,7 +65,7 @@ router.post("/verify/email/reset", async (req: Request, res: Response) => {
   }
 });
 
-router.post("/verify/otp/reset", async (req: Request, res: Response) => {
+router.post("/reset/verify/otp", async (req: Request, res: Response) => {
   try {
     const { emailId, otp } = req.body;
 
@@ -133,6 +134,63 @@ router.post("/verify/otp/reset", async (req: Request, res: Response) => {
     return res.status(200).json({
       success: true,
       message: "OTP verified successfully! you can now reset your password.",
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      success: false,
+      message: "Internal server error",
+    });
+  }
+});
+
+router.post("reset/update/password", async (req: Request, res: Response) => {
+  try {
+    const { emailId, newPassword, confirmPassword } = req.body;
+    const normEmail = emailId.trim().toLowerCase();
+    if (!normEmail || !validator.isEmail(normEmail))
+      return res
+        .status(400)
+        .json({ success: false, message: "Valid email is required!" });
+    const normNewPass = newPassword.trim();
+    const normConfirmPass = confirmPassword.trim();
+    if (
+      !normNewPass ||
+      normNewPass.length < 8 ||
+      normNewPass.length > 20 ||
+      !validator.isStrongPassword(normNewPass, {
+        minLength: 8,
+        minLowercase: 1,
+        minUppercase: 1,
+        minNumbers: 1,
+        minSymbols: 1,
+      })
+    )
+      return res.status(400).json({
+        success: false,
+        message: "Valid new password is required!",
+      });
+    if (!normConfirmPass || normNewPass !== normConfirmPass)
+      return res.status(400).json({
+        success: false,
+        message: "Passwords do not match!",
+      });
+
+    const user = await User.findOne({ emailId: normEmail });
+    if (!user)
+      return res.status(404).json({
+        success: false,
+        message: "User not found!",
+      });
+
+    
+
+    user.password = await bcrypt.hash(normNewPass, 10);
+    await user.save();
+
+    return res.status(200).json({
+      success: true,
+      message: "Password updated successfully!",
     });
   } catch (error) {
     console.error(error);

@@ -1,18 +1,25 @@
-import React, { useState, type ChangeEvent } from "react";
+import { type ChangeEvent } from "react";
 
-const ChangePassword = () => {
-  const [formData, setFormData] = useState({
-    newPassword: "",
-    confirmPassword: "",
-  });
-
+const ChangePassword = ({
+  formData,
+  onChange,
+  handlePasswordSubmit,
+}: {
+  formData: {
+    newPassword: string;
+    confirmPassword: string;
+  };
+  onChange: (data: typeof formData) => void;
+  handlePasswordSubmit: () => void;
+}) => {
   const handleSubmit = (e: ChangeEvent<HTMLFormElement>) => {
     e.preventDefault();
+    handlePasswordSubmit();
   };
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+    onChange({ ...formData, [name]: value });
   };
 
   return (

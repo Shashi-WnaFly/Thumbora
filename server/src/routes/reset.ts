@@ -2,7 +2,7 @@ import express, { Request, Response } from "express";
 import User from "../models/User.js";
 import { PASSWORD_RESET_TEMPLATE } from "../utils/constants.js";
 import emailTransporter from "../config/emailTransporter.js";
-import { randomInt, createHash, timingSafeEqual } from "crypto";
+import crypto from "crypto";
 import validator from "validator";
 import bcrypt from "bcrypt";
 
@@ -12,7 +12,7 @@ router.post("/reset/verify/email", async (req: Request, res: Response) => {
   try {
     // TODO: implement rate limiting using redis
     const { emailId } = req.body;
-    const normalizedEmail = emailId.trim().toLowerCase();
+    const normalizedEmail = emailId ? emailId.trim().toLowerCase() : null;
 
     if (!normalizedEmail || !validator.isEmail(normalizedEmail))
       return res
@@ -21,24 +21,23 @@ router.post("/reset/verify/email", async (req: Request, res: Response) => {
 
     const user = await User.findOne({ emailId: normalizedEmail });
 
-    res.status(200).json({
-      success: true,
-      message: "If the email exists, OTP has been sent.",
-    });
-
-    if (!user) return;
+    if (!user)
+      return res.status(200).json({
+        success: false,
+        message: "If the email exists, OTP has been sent.",
+      });
 
     if (
       user.otpExpireAt &&
-      user.otpExpireAt > new Date(Date.now() - 2 * 60 * 1000)
+      user.otpExpireAt > new Date(Date.now() + 8 * 60 * 1000)
     )
-      return res.status(200).json({
-        success: true,
-        message: "OTP already sent. Please wait before requesting again.",
+      return res.status(429).json({
+        success: false,
+        message: "Please wait 2 minute before requesting another OTP.",
       });
 
-    const otp = randomInt(100000, 1000000).toString();
-    user.verifyOtp = createHash("sha256").update(otp).digest("hex"); // creating OTP hash
+    const otp = crypto.randomInt(100000, 999999).toString();
+    user.verifyOtp = crypto.createHash("sha256").update(otp).digest("hex"); // creating OTP hash
     user.otpExpireAt = new Date(Date.now() + 10 * 60 * 1000);
 
     const emailTemplate = PASSWORD_RESET_TEMPLATE.replace(
@@ -54,8 +53,13 @@ router.post("/reset/verify/email", async (req: Request, res: Response) => {
       html: emailTemplate,
     };
 
-    await user.save();
     await emailTransporter.sendMail(options);
+    await user.save();
+
+    res.status(200).json({
+      success: true,
+      message: "OTP has been sent.",
+    });
   } catch (error) {
     console.error(error);
     return res.status(500).json({
@@ -85,7 +89,7 @@ router.post("/reset/verify/otp", async (req: Request, res: Response) => {
 
     const user = await User.findOne({ emailId: normalizedEmail });
 
-    if (!user || !user.verifyOtp || !user.otpExpireAt)
+    if (!user || !user.verifyOtp || !user.hashExpireAt)
       return res.status(401).json({
         success: false,
         message: "Invalid OTP or email!",
@@ -93,9 +97,9 @@ router.post("/reset/verify/otp", async (req: Request, res: Response) => {
 
     user.otpAttempts += 1;
 
-    if (user.otpExpireAt < new Date()) {
+    if (user.hashExpireAt < new Date()) {
       user.verifyOtp = null;
-      user.otpExpireAt = null;
+      user.hashExpireAt = null;
       user.otpAttempts = 0;
       await user.save();
 
@@ -107,7 +111,7 @@ router.post("/reset/verify/otp", async (req: Request, res: Response) => {
 
     if (user.otpAttempts > 5) {
       user.verifyOtp = null;
-      user.otpExpireAt = null;
+      user.hashExpireAt = null;
       user.otpAttempts = 0;
       await user.save();
 
@@ -126,14 +130,20 @@ router.post("/reset/verify/otp", async (req: Request, res: Response) => {
       });
     }
 
+    const resetToken = randomBytes(32).toString("hex");
+
+    user.resetPasswordToken = createHash("sha256")
+      .update(resetToken)
+      .digest("hex");
     user.verifyOtp = null;
-    user.otpExpireAt = null;
+    user.hashExpireAt = new Date(Date.now() + 10 * 60 * 1000);
     user.otpAttempts = 0;
     await user.save();
 
-    return res.status(200).json({
+    res.status(200).json({
       success: true,
       message: "OTP verified successfully! you can now reset your password.",
+      resetToken: resetToken,
     });
   } catch (error) {
     console.error(error);
@@ -144,18 +154,19 @@ router.post("/reset/verify/otp", async (req: Request, res: Response) => {
   }
 });
 
-router.post("reset/update/password", async (req: Request, res: Response) => {
+router.post("/reset/update/password", async (req: Request, res: Response) => {
   try {
-    const { emailId, newPassword, confirmPassword } = req.body;
-    const normEmail = emailId.trim().toLowerCase();
-    if (!normEmail || !validator.isEmail(normEmail))
-      return res
-        .status(400)
-        .json({ success: false, message: "Valid email is required!" });
+    const { resetToken, newPassword, confirmPassword } = req.body;
+    const normResetToken = resetToken.trim();
     const normNewPass = newPassword.trim();
     const normConfirmPass = confirmPassword.trim();
+
+    if (!normResetToken || !normNewPass || !normConfirmPass)
+      return res
+        .status(400)
+        .json({ success: false, message: "All fields are required!" });
+
     if (
-      !normNewPass ||
       normNewPass.length < 8 ||
       normNewPass.length > 20 ||
       !validator.isStrongPassword(normNewPass, {
@@ -168,29 +179,47 @@ router.post("reset/update/password", async (req: Request, res: Response) => {
     )
       return res.status(400).json({
         success: false,
-        message: "Valid new password is required!",
+        message:
+          "Password must be 8-20 size contain uppercase, lowercase, number and symbol!",
       });
-    if (!normConfirmPass || normNewPass !== normConfirmPass)
+
+    if (normNewPass !== normConfirmPass)
       return res.status(400).json({
         success: false,
         message: "Passwords do not match!",
       });
 
-    const user = await User.findOne({ emailId: normEmail });
+    const hashedResetToken = createHash("sha256")
+      .update(normResetToken)
+      .digest("hex");
+
+    const user = await User.findOne({
+      resetPasswordToken: hashedResetToken,
+      hashExpireAt: { $gt: new Date() },
+    });
+
     if (!user)
-      return res.status(404).json({
+      return res.status(401).json({
         success: false,
-        message: "User not found!",
+        message: "Invalid or expired reset token!",
       });
 
-    
+    const isSamePassword = await bcrypt.compare(normNewPass, user.password);
 
+    if (isSamePassword)
+      return res.status(400).json({
+        success: false,
+        message: "New password cannot be the same as the old password!",
+      });
+
+    user.resetPasswordToken = null;
+    user.hashExpireAt = null;
     user.password = await bcrypt.hash(normNewPass, 10);
     await user.save();
 
-    return res.status(200).json({
+    res.status(200).json({
       success: true,
-      message: "Password updated successfully!",
+      message: "Password reset successfully!",
     });
   } catch (error) {
     console.error(error);

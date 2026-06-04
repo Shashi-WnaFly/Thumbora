@@ -42,26 +42,6 @@ const userSchema = new Schema<IUser>(
       toLowerCase: true,
       enum: ["male", "female", "other"],
     },
-    verifyOtp: {
-      type: String,
-      default: null,
-      trim: true,
-      minLength: 6,
-      maxLength: 6,
-    },
-    otpAttempts: {
-      type: Number,
-      default: 0,
-    },
-    resetPasswordToken: {
-      type: String,
-      default: null,
-      trim: true,
-    },
-    hashExpireAt: {
-      type: Date,
-      default: null,
-    },
     isVerified: {
       type: Boolean,
       default: false,
@@ -73,6 +53,30 @@ const userSchema = new Schema<IUser>(
       validate: (value: string) => {
         if (!validator.isURL(value)) throw new Error("Avatar Url is Invalid!");
       },
+    },
+    verifyOtp: {
+      type: String,
+      default: null,
+      trim: true,
+      minLength: 6,
+      maxLength: 6,
+    },
+    otpExpireAt: {
+      type: Date,
+      default: null,
+    },
+    otpAttempts: {
+      type: Number,
+      default: 0,
+    },
+    resetPasswordToken: {
+      type: String,
+      default: null,
+      trim: true,
+    },
+    resetPasswordExpireAt: {
+      type: Date,
+      default: null,
     },
   },
   { timestamps: true },

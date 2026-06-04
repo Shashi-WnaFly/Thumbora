@@ -53,7 +53,12 @@ const userSchema = new Schema<IUser>(
       type: Number,
       default: 0,
     },
-    otpExpireAt: {
+    resetPasswordToken: {
+      type: String,
+      default: null,
+      trim: true,
+    },
+    hashExpireAt: {
       type: Date,
       default: null,
     },

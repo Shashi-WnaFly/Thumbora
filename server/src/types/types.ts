@@ -8,7 +8,8 @@ export interface IUser extends Document {
   gender?: IGender;
   verifyOtp?: string;
   otpAttempts?: number;
-  otpExpireAt?: Date;
+  resetPasswordToken?: string;
+  hashExpireAt?: Date;
   isVerified?: boolean;
   avatarUrl?: string;
   createdAt?: Date;

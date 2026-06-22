@@ -55,7 +55,7 @@ const ThumbnailSchema = new Schema<IThumbnail>(
       type: String,
       default: "",
       validate: (value: string) => {
-        if (!validator.isURL(value)) throw new Error("Invalid image url!!");
+        if (value && !validator.isURL(value)) throw new Error("Invalid image url!!");
       },
     },
     promptUsed: {

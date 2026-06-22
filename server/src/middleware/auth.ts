@@ -8,14 +8,14 @@ const userAuth = async (req: Request, res: Response, next: NextFunction) => {
 
     if (!token) throw new Error("Credentials are invalid!!");
 
-    const { userId } = jwt.verify(token, process.env.JWT_SECRET!) as JwtPayload;
+    const { userId } = 
+    jwt.verify(token, process.env.JWT_SECRET!) as JwtPayload;
 
     const user = await User.findById(userId);
 
     if (!user) throw new Error("Credentials are invalid!!");
 
     req.user = user;
-
     next();
   } catch (error) {
     res.status(401).json({ success: false, message: (error as Error).message });

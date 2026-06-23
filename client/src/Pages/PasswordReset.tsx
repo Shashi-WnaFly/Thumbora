@@ -12,6 +12,7 @@ const PasswordReset = () => {
   const [email, setEmail] = useState("");
   const [isOTPSend, setIsOTPSend] = useState(false);
   const [isOTPVerified, setIsOTPVerified] = useState(false);
+  const [resetToken, setResetToken] = useState("");
   const [formData, setFormData] = useState({
     newPassword: "",
     confirmPassword: "",
@@ -56,6 +57,7 @@ const PasswordReset = () => {
         otp: otp,
       });
       showToast("success", data.data.message);
+      setResetToken(data.data.resetToken);
 
       setIsOTPVerified(true);
     } catch (error) {
@@ -66,18 +68,16 @@ const PasswordReset = () => {
   const handlePasswordSubmit = async () => {
     try {
       const emailId = email ? email.trim().toLowerCase() : "";
-      const normNewPass = formData.newPassword.trim();
-      const normConfirmPass = formData.confirmPassword.trim();
-
+      const { newPassword, confirmPassword } = formData;
       if (!emailId || !validator.isEmail(emailId)) {
         showToast("warning", "Enter valid email address.");
         return;
       }
       if (
-        !normNewPass ||
-        normNewPass.length < 8 ||
-        normNewPass.length > 20 ||
-        !validator.isStrongPassword(normNewPass, {
+        !newPassword ||
+        newPassword.length < 8 ||
+        newPassword.length > 20 ||
+        !validator.isStrongPassword(newPassword, {
           minLength: 8,
           minLowercase: 1,
           minUppercase: 1,
@@ -91,19 +91,19 @@ const PasswordReset = () => {
         );
         return;
       }
-      if (normNewPass !== normConfirmPass) {
+      if (newPassword !== confirmPassword) {
         showToast("warning", "Passwords do not match.");
         return;
       }
       const data = await api.post("/reset/update/password", {
-        emailId: emailId,
-        newPassword: normNewPass,
-        confirmPassword: normConfirmPass,
+        newPassword: newPassword,
+        confirmPassword: confirmPassword,
+        resetToken: resetToken,
       });
       showToast("success", data.data.message);
       setTimeout(() => {
         navigate("/login");
-      }, 1000);
+      }, 500);
     } catch (error) {
       showToast("error", (error as Error).message);
     }

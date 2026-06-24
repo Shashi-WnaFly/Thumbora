@@ -7,6 +7,8 @@ import ChangePassword from "../components/passwordReset/ChangePassword";
 import useToast from "../hooks/useToast";
 import api from "../configs/api";
 import { useNavigate } from "react-router-dom";
+import type { apiResponse } from "../types";
+import axios from "axios";
 
 const PasswordReset = () => {
   const [email, setEmail] = useState("");
@@ -29,13 +31,24 @@ const PasswordReset = () => {
         return;
       }
 
-      const data = await api.post("/reset/verify/email", { emailId: emailId });
+      const res = await api.post("/reset/verify/email", {
+        emailId: emailId,
+      });
+      const data: apiResponse = res.data;
 
-      showToast("success", data.data.message);
+      showToast("success", data.message);
       setIsOTPSend(true);
     } catch (error) {
       console.error(error);
-      showToast("error", (error as Error).message);
+
+      if (axios.isAxiosError(error)) {
+        const message =
+          error.response?.data?.message ||
+          "Something went wrong. Please try again.";
+        showToast("warning", message);
+        return;
+      }
+      showToast("error", "Unexpected errro occured.");
     }
   };
   const handleOTPSubmit = async (otp: string) => {

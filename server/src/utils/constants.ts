@@ -80,7 +80,7 @@ export const PASSWORD_RESET_TEMPLATE = `
 
     .button {
       width: 100%;
-      background: #22D172;
+      background: #FF6A1C;
       text-decoration: none;
       display: inline-block;
       padding: 10px 0;
@@ -136,7 +136,7 @@ export const PASSWORD_RESET_TEMPLATE = `
                       </tr>
                       <tr>
                         <td style="padding: 0 0 10px; font-size: 14px; line-height: 150%;">
-                          The password reset otp is only valid for the next 30 minutes.
+                          The password reset otp is only valid for the next 10 minutes.
                         </td>
                       </tr>
                     </tbody>

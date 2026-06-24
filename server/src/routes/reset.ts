@@ -13,7 +13,7 @@ router.post("/reset/verify/email", async (req: Request, res: Response) => {
     // TODO: implement rate limiting using redis
     const { emailId } = req.body;
     const normalizedEmail = emailId ? emailId.trim().toLowerCase() : null;
-    console.log(emailId);
+
     if (!normalizedEmail || !validator.isEmail(normalizedEmail))
       return res
         .status(400)
@@ -55,7 +55,7 @@ router.post("/reset/verify/email", async (req: Request, res: Response) => {
 
     await emailTransporter.sendMail(options);
     await user.save();
-    console.log(sub);
+    
     res.status(200).json({
       success: true,
       message: "OTP has been sent.",

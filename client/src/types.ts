@@ -68,5 +68,6 @@ export interface IToast {
 export interface apiResponse {
   success: boolean;
   data?: object;
-  message?: string;
+  message: string;
+  resetToken?: string;
 }

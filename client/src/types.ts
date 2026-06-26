@@ -70,4 +70,5 @@ export interface apiResponse {
   data?: object;
   message: string;
   resetToken?: string;
+  RZYKey?: string;
 }

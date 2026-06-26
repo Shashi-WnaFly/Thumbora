@@ -19,11 +19,13 @@ import authRoutes from "./routes/auth.js";
 import userProfile from "./routes/profile.js";
 import userThumbnail from "./routes/user.js";
 import resetRoutes from "./routes/reset.js";
+import paymentRoutes from "./routes/payment.js"
 
 app.use("/", authRoutes);
 app.use("/", userProfile);
 app.use("/", userThumbnail);
 app.use("/", resetRoutes);
+app.use("/", paymentRoutes);
 
 const PORT = process.env.PORT || 5000;
 

@@ -14,6 +14,8 @@ router.post(
       const subscriptionType: IsubscriptionType = req.body.subscriptionType;
       const { userName, emailId, _id } = req.user;
 
+      if (!subscriptionType) throw new Error("subscription plan is invalid!");
+
       const order = await instance.orders.create({
         amount: subscriptionAmount[subscriptionType] * 100,
         receipt: "receipt#1",
@@ -38,6 +40,8 @@ router.post(
       });
 
       const paymentDetails = await newPayment.save();
+
+      console.log(paymentDetails.toJSON());
 
       res.json({
         success: true,

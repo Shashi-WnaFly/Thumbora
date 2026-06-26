@@ -44,6 +44,23 @@ export interface IThumbnail extends Document {
   updatedAt?: Date;
 }
 
+export interface IPayment extends Document {
+  userId: mongoose.Schema.Types.ObjectId;
+  orderId: string;
+  paymentId: string;
+  status: string;
+  notes: INotes;
+  receipt: string;
+  amount: number;
+  currency: string;
+}
+
+export interface INotes extends Document {
+  userName: string;
+  emailId: string;
+  subscriptionType: string;
+}
+
 export type IColor =
   | "vibrant"
   | "sunset"
@@ -53,11 +70,12 @@ export type IColor =
   | "monochrome"
   | "ocean"
   | "pastel";
+
 export type IAspectRatio = "16:9" | "1:1" | "9:16";
+
 export type IStyle =
   | "Bold & Graphic"
   | "Tech/Futuristic"
   | "Minimalist"
   | "Photorealistic"
   | "Illustrated";
-

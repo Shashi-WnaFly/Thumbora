@@ -75,7 +75,14 @@ const PasswordReset = () => {
       setIsOTPVerified(true);
     } catch (error) {
       console.error(error);
-      showToast("error", (error as Error).message);
+      if (axios.isAxiosError(error)) {
+        const message =
+          error.response?.data?.message ||
+          "Something went wrong. Please try again.";
+        showToast("warning", message);
+        return;
+      }
+      showToast("error", "Unexpected error occured!");
     }
   };
   const handlePasswordSubmit = async () => {
@@ -118,7 +125,14 @@ const PasswordReset = () => {
         navigate("/login");
       }, 500);
     } catch (error) {
-      showToast("error", (error as Error).message);
+      if (axios.isAxiosError(error)) {
+        const message =
+          error.response?.data?.message ||
+          "Something went wrong. Please try again.";
+        showToast("warning", message);
+        return;
+      }
+      showToast("error", "Unexpected error occured!");
     }
   };
 

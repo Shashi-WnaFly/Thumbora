@@ -45,7 +45,7 @@ const PaymentSchema = new mongoose.Schema<IPayment>({
       type: String,
     },
   },
-});
+}, {timestamps: true});
 
 const Payment =
   mongoose.models.Payment || mongoose.model<IPayment>("Payment", PaymentSchema);

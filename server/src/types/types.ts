@@ -26,8 +26,6 @@ export interface ISafeUser extends Document {
   avatarUrl?: string;
 }
 
-export type IGender = "male" | "female" | "other";
-
 export interface IThumbnail extends Document {
   userId: mongoose.Schema.Types.ObjectId;
   title: string;
@@ -61,6 +59,8 @@ export interface INotes extends Document {
   subscriptionType: string;
 }
 
+export type IGender = "male" | "female" | "other";
+
 export type IColor =
   | "vibrant"
   | "sunset"
@@ -79,3 +79,5 @@ export type IStyle =
   | "Minimalist"
   | "Photorealistic"
   | "Illustrated";
+
+export type IsubscriptionType = "Basic" | "Pro" | "Enterprise";

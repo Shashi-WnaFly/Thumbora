@@ -151,8 +151,8 @@ export const PASSWORD_RESET_TEMPLATE = `
 </body>
 </html>
 `;
-export const subscriptionType = {
-  Basic: "599",
-  Pro: "1199",
-  Enterprise: "2599",
+export const subscriptionAmount = {
+  Basic: 599,
+  Pro: 1199,
+  Enterprise: 2599,
 };

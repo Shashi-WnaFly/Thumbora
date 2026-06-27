@@ -1,4 +1,4 @@
-import type { apiResponse, IPricing } from "../types";
+import type { apiResponse, IPricing, paymentOrder } from "../types";
 import { CheckIcon } from "lucide-react";
 import api from "../configs/api";
 
@@ -11,22 +11,18 @@ const PricingCard = ({
 }: IPricing) => {
   const handlePayment = async () => {
     try {
-      const order = (await api.post("/payment/create/order", {
+      const order = await api.post("/payment/create/order", {
         subscriptionType: name,
-      })) as apiResponse;
+      });
+
+      const data: apiResponse = order.data;
 
       if (!order || !order.data) throw new Error("Something went wrong.");
 
-      const { orderId, currency, notes, amount, RZYKey } = order.data as {
-        orderId: string;
-        currency: string;
-        notes: Record<string, any>;
-        amount: number;
-        RZYKey: string;
-      };
+      const { orderId, currency, notes, amount } = data.data as paymentOrder;
 
       const options = {
-        key: RZYKey,
+        key: data.RZYKey,
         amount,
         currency,
         name: "Thumbora",

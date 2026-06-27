@@ -65,6 +65,19 @@ export interface IToast {
   timeout?: ReturnType<typeof setTimeout>;
 }
 
+export interface paymentOrder {
+  orderId: string;
+  currency: string;
+  notes: INotes;
+  amount: number;
+}
+
+export interface INotes {
+  userName: string;
+  emailId: string;
+  subscriptionType: string;
+}
+
 export interface apiResponse {
   success: boolean;
   data?: object;

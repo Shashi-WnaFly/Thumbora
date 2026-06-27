@@ -41,8 +41,6 @@ router.post(
 
       const paymentDetails = await newPayment.save();
 
-      console.log(paymentDetails.toJSON());
-
       res.json({
         success: true,
         data: paymentDetails.toJSON(),

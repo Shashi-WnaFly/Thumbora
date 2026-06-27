@@ -1,4 +1,4 @@
-import type { IFooter } from "../types";
+import type { IFooter } from "../types/types";
 
 export const footerData: IFooter[] = [
     {

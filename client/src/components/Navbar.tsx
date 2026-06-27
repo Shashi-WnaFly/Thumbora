@@ -1,7 +1,7 @@
 import { MenuIcon, XIcon } from "lucide-react";
 import Logo from "../../public/assets/Logo";
 import { navLinks } from "../data/navLinks";
-import type { INavLink, IStore } from "../types";
+import type { INavLink, IStore } from "../types/types";
 import { Link, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";

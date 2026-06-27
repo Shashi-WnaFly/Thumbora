@@ -1,4 +1,4 @@
-import type { IPricing } from "../types";
+import type { IPricing } from "../types/types";
 
 export const pricingData: IPricing[] = [
   {

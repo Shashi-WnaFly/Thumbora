@@ -1,7 +1,7 @@
 import { ArrowRight } from "lucide-react";
 import SectionTitle from "../components/SectionTitle";
 import { features } from "../data/features";
-import type { IFeature } from "../types";
+import type { IFeature } from "../types/types";
 
 export default function FeaturesSection() {
   return (

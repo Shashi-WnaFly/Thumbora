@@ -7,7 +7,7 @@ import {
 import { Link } from "react-router-dom";
 import { motion } from "motion/react";
 import { footerData } from "../data/footer";
-import type { ILink } from "../types";
+import type { ILink } from "../types/types";
 
 export default function Footer() {
   return (

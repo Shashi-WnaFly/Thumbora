@@ -1,7 +1,7 @@
 import React from "react";
 import SectionTitle from "../components/SectionTitle";
 import { pricingData } from "../data/pricing";
-import type { IPricing } from "../types";
+import type { IPricing } from "../types/types";
 import PricingCard from "../components/PricingCard";
 
 export default function PricingSection() {

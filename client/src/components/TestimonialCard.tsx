@@ -1,4 +1,4 @@
-import type { ITestimonial } from "../types";
+import type { ITestimonial } from "../types/types";
 
 export default function TestimonialCard({
   image,

@@ -7,7 +7,7 @@ import ChangePassword from "../components/passwordReset/ChangePassword";
 import useToast from "../hooks/useToast";
 import api from "../configs/api";
 import { useNavigate } from "react-router-dom";
-import type { apiResponse } from "../types";
+import type { apiResponse } from "../types/types";
 import axios from "axios";
 
 const PasswordReset = () => {

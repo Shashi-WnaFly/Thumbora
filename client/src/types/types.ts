@@ -1,4 +1,4 @@
-import type { IThumbnail } from "./data/dataAssets";
+import type { IThumbnail } from "../data/dataAssets";
 
 export interface INavLink {
   name: string;
@@ -84,4 +84,22 @@ export interface apiResponse {
   message: string;
   resetToken?: string;
   RZYKey?: string;
+}
+
+export interface RazorpayOptions {
+  key: string;
+  amount: number;
+  currency: string;
+  name: string;
+  description: string;
+  image?: string;
+  order_id: string;
+  notes?: INotes;
+  theme?: {
+    color: string;
+  };
+}
+
+export interface RazorpayInstance {
+  open(): void;
 }

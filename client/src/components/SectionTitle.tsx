@@ -1,4 +1,4 @@
-import type { SectionTitleProps } from "../types";
+import type { SectionTitleProps } from "../types/types";
 
 export default function SectionTitle({text1, text2, text3}: SectionTitleProps) {
   return (

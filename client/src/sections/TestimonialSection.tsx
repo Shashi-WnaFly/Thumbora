@@ -1,7 +1,7 @@
 import SectionTitle from "../components/SectionTitle";
 import { testimonialsData } from "../data/testimonial";
 import TestimonialCard from "../components/TestimonialCard";
-import type { ITestimonial } from "../types";
+import type { ITestimonial } from "../types/types";
 
 export default function TestimonialSection() {
   return (

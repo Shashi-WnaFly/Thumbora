@@ -11,7 +11,7 @@ import StyleSelector from "../components/StyleSelector";
 import ColorSchemeSelector from "../components/ColorSchemeSelector";
 import PreviewPanel from "../components/PreviewPanel";
 import { useDispatch, useSelector } from "react-redux";
-import type { IStore } from "../types";
+import type { IStore } from "../types/types";
 import api from "../configs/api";
 import useToast from "../hooks/useToast";
 import { unShiftThumbnail } from "../utils/thumbnailListSlice";

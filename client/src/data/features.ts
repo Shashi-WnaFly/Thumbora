@@ -1,4 +1,4 @@
-import type { IFeature } from "../types";
+import type { IFeature } from "../types/types";
 
 export const features: IFeature[] = [
   {

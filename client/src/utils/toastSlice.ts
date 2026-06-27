@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import type { IToast } from "../types";
+import type { IToast } from "../types/types";
 
 const toastSlice = createSlice({
   name: "toast",

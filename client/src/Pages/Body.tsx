@@ -4,7 +4,7 @@ import Footer from '../components/Footer';
 import Toast from '../components/Toast';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import type { IStore } from '../types';
+import type { IStore } from '../types/types';
 import api from '../configs/api';
 import { addUser } from '../utils/userSlice';
 

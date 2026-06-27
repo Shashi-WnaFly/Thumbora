@@ -3,7 +3,7 @@ import SoftBackdrop from "../components/SoftBackdrop";
 import { isStrongPassword } from "validator";
 import useToast from "../hooks/useToast";
 import api from "../configs/api";
-import type { apiResponse } from "../types";
+import type { apiResponse } from "../types/types";
 
 interface IFormData {
   oldPassword: string;

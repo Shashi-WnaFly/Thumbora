@@ -5,7 +5,7 @@ import ThumbnailCard from "../components/ThumbnailCard";
 import useToast from "../hooks/useToast";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import type { IStore } from "../types";
+import type { IStore } from "../types/types";
 import api from "../configs/api";
 import { pushThumbnail } from "../utils/thumbnailListSlice";
 

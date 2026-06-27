@@ -6,7 +6,7 @@ import {
   FaTimesCircle,
 } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
-import type { IStore, IToast } from "../types";
+import type { IStore, IToast } from "../types/types";
 import { removeToast } from "../utils/toastSlice";
 
 const toastIcons: Record<IToast["type"], JSX.Element> = {

@@ -44,7 +44,7 @@ router.post(
       res.json({
         success: true,
         data: paymentDetails.toJSON(),
-        RZYkey: process.env.RAZORPAY_KEY_ID,
+        RZYKey: process.env.RAZORPAY_KEY_ID,
         message: "Order has created successfully.",
       });
     } catch (error) {
@@ -52,5 +52,9 @@ router.post(
     }
   },
 );
+
+router.post('/payment/webhook', async (req: Request, res: Response) => {
+  
+})
 
 export default router;

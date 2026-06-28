@@ -54,6 +54,17 @@ const userSchema = new Schema<IUser>(
         if (!validator.isURL(value)) throw new Error("Avatar Url is Invalid!");
       },
     },
+    subscriptionType: {
+      type: String,
+      enum: {
+        values: ["Basic", "Pro", "Enterprise"],
+        message: "{VALUE} is not supported",
+      },
+    },
+    isPremium: {
+      type: Boolean,
+      default: false,
+    },
     verifyOtp: {
       type: String,
       default: null,

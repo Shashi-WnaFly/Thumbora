@@ -7,6 +7,8 @@ export interface IUser extends Document {
   age?: number;
   gender?: IGender;
   verifyOtp?: string;
+  subscriptionType?: string;
+  isPremium?: boolean;
   otpAttempts?: number;
   otpExpireAt?: Date;
   resetPasswordToken?: string;

@@ -1,10 +1,15 @@
 import express, { Request, Response } from "express";
 import User from "../models/User.js";
-import { PASSWORD_RESET_TEMPLATE } from "../utils/constants.js";
+import {
+  otpCooldownKey,
+  otpDailyLimitKey,
+  PASSWORD_RESET_TEMPLATE,
+} from "../utils/constants.js";
 import emailTransporter from "../config/emailTransporter.js";
 import crypto from "crypto";
 import validator from "validator";
 import bcrypt from "bcrypt";
+import redis from "../config/redis.js";
 
 const router = express.Router();
 
@@ -27,18 +32,34 @@ router.post("/reset/verify/email", async (req: Request, res: Response) => {
         message: "If the email exists, OTP has been sent.",
       });
 
-    if (
-      user.otpExpireAt &&
-      user.otpExpireAt > new Date(Date.now() + 8 * 60 * 1000) // 2 minutes cool down period.
-    )
+    const otpCooldownKi = otpCooldownKey(normalizedEmail);
+    const isCooldown = await redis.exists(otpCooldownKi);
+
+    if (isCooldown) {
+      const ttl = await redis.ttl(otpCooldownKi);
+
       return res.status(429).json({
         success: false,
-        message: "Please wait 2 minute before requesting another OTP.",
+        message: `wait ${ttl} seconds before requesting another OTP.`,
       });
+    }
+
+    const dailyLimitKey = otpDailyLimitKey(normalizedEmail);
+    const count = await redis.incr(dailyLimitKey);
+
+    if (count === 1) {
+      await redis.expire(dailyLimitKey, 24 * 60 * 60);
+    }
+
+    if (count > 5) {
+      return res
+        .status(429)
+        .json({ success: false, message: "Daily OTP limit reached" });
+    }
 
     const otp = crypto.randomInt(100000, 999999).toString();
     user.verifyOtp = crypto.createHash("sha256").update(otp).digest("hex"); // creating OTP hash
-    user.otpExpireAt = new Date(Date.now() + 10 * 60 * 1000);
+    user.otpExpireAt = new Date(Date.now() + 5 * 60 * 1000);
 
     const emailTemplate = PASSWORD_RESET_TEMPLATE.replace(
       "{{otp}}",
@@ -55,7 +76,8 @@ router.post("/reset/verify/email", async (req: Request, res: Response) => {
 
     await emailTransporter.sendMail(options);
     await user.save();
-    
+    await redis.set(otpCooldownKi, "1", "EX", 60);
+
     res.status(200).json({
       success: true,
       message: "OTP has been sent.",

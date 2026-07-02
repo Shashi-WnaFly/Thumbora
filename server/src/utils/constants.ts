@@ -156,3 +156,7 @@ export const subscriptionAmount = {
   Pro: 1199,
   Enterprise: 2599,
 };
+
+export const otpCooldownKey = (email: string) => `otp:cooldown:${email}`;
+
+export const otpDailyLimitKey = (email: string) => `otp:dailyLimit:${email}`;

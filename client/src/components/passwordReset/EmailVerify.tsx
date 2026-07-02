@@ -51,8 +51,7 @@ const EmailVerify = ({
       inputRefs.current[index - 1].focus();
   };
 
-  const handleSubmit = (e: ChangeEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const handleSubmit = () => {
     const otp = inputRefs.current.map((input) => input.value).join("");
     if (otp.length < 6) {
       showToast("error", "Please enter a valid 6-digit OTP.");
@@ -67,7 +66,7 @@ const EmailVerify = ({
       <p className="mt-2 text-sm text-gray-400 text-center">
         Enter the 6-digit code sent to your email ID.
       </p>
-      <form onSubmit={(e) => handleSubmit(e)}>
+      <div>
         <div
           className="grid grid-cols-6 gap-2 mt-8"
           onPaste={(e) => handlePaste(e)}
@@ -90,7 +89,8 @@ const EmailVerify = ({
         </div>
         <div>
           <button
-            type="submit"
+            type="button"
+            onClick={() => handleSubmit()}
             className="mt-8 w-full h-11 rounded-full text-white text-sm bg-orange-600 hover:opacity-90 transition-opacity"
           >
             Verify Email
@@ -105,7 +105,7 @@ const EmailVerify = ({
             Resend
           </button>
         </div>
-      </form>
+      </div>
     </div>
   );
 };

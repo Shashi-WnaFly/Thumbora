@@ -3,8 +3,9 @@ import User from "../models/User.js";
 import {
   otpCooldownKey,
   otpDailyLimitKey,
-  PASSWORD_RESET_TEMPLATE,
-} from "../utils/constants.js";
+  otpVerifyAttemptsKey,
+} from "../utils/common.js";
+import { PASSWORD_RESET_TEMPLATE } from "../utils/constants.js";
 import emailTransporter from "../config/emailTransporter.js";
 import crypto from "crypto";
 import validator from "validator";
@@ -117,12 +118,9 @@ router.post("/reset/verify/otp", async (req: Request, res: Response) => {
         message: "Invalid OTP or email!",
       });
 
-    user.otpAttempts += 1;
-
     if (user.otpExpireAt < new Date()) {
       user.verifyOtp = null;
       user.otpExpireAt = null;
-      user.otpAttempts = 0;
       await user.save();
 
       return res.status(401).json({
@@ -131,15 +129,18 @@ router.post("/reset/verify/otp", async (req: Request, res: Response) => {
       });
     }
 
-    if (user.otpAttempts > 3) {
-      user.verifyOtp = null;
-      user.otpExpireAt = null;
-      user.otpAttempts = 0;
-      await user.save();
+    const otpAttemptsKey = otpVerifyAttemptsKey(normalizedEmail);
 
+    const attempts = await redis.incr(otpAttemptsKey);
+
+    if (attempts === 1) {
+      redis.expire(otpAttemptsKey, 600);
+    }
+
+    if (attempts > 3) {
       return res.status(429).json({
         success: false,
-        message: "Too many attempts! Please request a new OTP.",
+        message: "Too many attempts. Try again after 10 minutes.",
       });
     }
 
@@ -163,11 +164,12 @@ router.post("/reset/verify/otp", async (req: Request, res: Response) => {
       .createHash("sha256")
       .update(resetToken)
       .digest("hex");
-    user.verifyOtp = null;
-    user.resetPasswordExpireAt = new Date(Date.now() + 10 * 60 * 1000);
-    user.otpAttempts = 0;
-    await user.save();
 
+    user.verifyOtp = null;
+    user.resetPasswordExpireAt = new Date(Date.now() + 5 * 60 * 1000);
+    await user.save();
+    await redis.del(otpAttemptsKey);
+    
     res.status(200).json({
       success: true,
       message: "OTP verified successfully! you can now reset your password.",

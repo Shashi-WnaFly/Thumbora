@@ -74,10 +74,6 @@ const userSchema = new Schema<IUser>(
       type: Date,
       default: null,
     },
-    otpAttempts: {
-      type: Number,
-      default: 0,
-    },
     resetPasswordToken: {
       type: String,
       default: null,

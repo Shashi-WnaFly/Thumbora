@@ -9,3 +9,10 @@ export const safeUser = (user: IUser): ISafeUser =>
     isVerified: user.isVerified,
     avatarUrl: user.avatarUrl,
   }) as ISafeUser;
+
+export const otpCooldownKey = (email: string) => `otp:cooldown:${email}`;
+
+export const otpDailyLimitKey = (email: string) => `otp:dailyLimit:${email}`;
+
+export const otpVerifyAttemptsKey = (email: string) =>
+  `otp:verifyAttempts:${email}`;

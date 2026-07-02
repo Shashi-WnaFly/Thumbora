@@ -9,7 +9,6 @@ export interface IUser extends Document {
   verifyOtp?: string;
   subscriptionType?: string;
   isPremium?: boolean;
-  otpAttempts?: number;
   otpExpireAt?: Date;
   resetPasswordToken?: string;
   resetPasswordExpireAt?: Date;

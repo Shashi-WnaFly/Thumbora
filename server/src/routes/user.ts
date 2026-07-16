@@ -3,8 +3,14 @@ import { userAuth } from "../middleware/auth.js";
 import Thumbnail from "../models/Thumbnail.js";
 import { colorSchemeDescriptions, stylePrompts } from "../utils/constants.js";
 import { IColor, IStyle } from "../types/types.js";
-import ai, { generateConfig } from "../config/ai.js";
 import { v2 as cloudinary } from "cloudinary";
+import { generateImage } from "../services/image.service.js";
+
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
 
 const router = express.Router();
 
@@ -22,22 +28,17 @@ router.post(
         colorScheme,
         textOverlay,
       } = req.body;
-      const userId = req.body.user._id;
+      const userId = req.user._id;
       thumbnail = await Thumbnail.create({
         userId,
         title,
         userPrompt,
-        promptUsed: userPrompt,
         style,
         aspectRatio,
         colorScheme,
         textOverlay,
         isGenerating: true,
       });
-
-      const model = "gemini-3-pro-image-preview";
-
-      const generatingConfig = generateConfig(aspectRatio);
 
       let prompt = `create a ${stylePrompts[style as IStyle]} for: "${title}"`;
 
@@ -51,24 +52,14 @@ router.post(
 
       prompt += `The thumbnail should be ${aspectRatio}, visually stunning, and designed to maximize click-through rate. Make it bold, professional and impossible to ignore.`;
 
-      const response: any = await ai.models.generateContent({
-        model,
-        contents: [prompt],
-        config: generatingConfig,
-      });
+      const imageUrl = await generateImage(aspectRatio, prompt);
 
-      const parts = response?.candidates[0]?.content?.parts;
+      console.log(imageUrl);
 
-      if (!parts) throw new Error("Unexpected response");
+      const response = await fetch(imageUrl!);
 
-      let imageBuffer: Buffer | null = null;
+      const imageBuffer = Buffer.from(await response.arrayBuffer());
 
-      for (const part of parts) {
-        if (part.inlineData)
-          imageBuffer = Buffer.from(part.inlineData.data, "base64");
-      }
-
-      // Upload directly from memory buffer to Cloudinary
       const uploadRes = await new Promise<any>((resolve, reject) => {
         const stream = cloudinary.uploader.upload_stream(
           {
@@ -83,16 +74,18 @@ router.post(
         stream.end(imageBuffer);
       });
 
+      console.log(uploadRes);
+
+      thumbnail.promptUsed = prompt;
       thumbnail.imageUrl = uploadRes.secure_url;
       thumbnail.isGenerating = false;
 
       await thumbnail.save();
 
-      return res.status(201).json({
+      return res.status(200).json({
         success: true,
         data: thumbnail,
       });
-      
     } catch (error) {
       console.error(error);
 

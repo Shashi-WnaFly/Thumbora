@@ -16,7 +16,6 @@ const router = express.Router();
 
 router.post("/reset/verify/email", async (req: Request, res: Response) => {
   try {
-    // TODO: implement rate limiting using redis
     const { emailId } = req.body;
     const normalizedEmail = emailId ? emailId.trim().toLowerCase() : null;
 
@@ -169,7 +168,7 @@ router.post("/reset/verify/otp", async (req: Request, res: Response) => {
     user.resetPasswordExpireAt = new Date(Date.now() + 5 * 60 * 1000);
     await user.save();
     await redis.del(otpAttemptsKey);
-    
+
     res.status(200).json({
       success: true,
       message: "OTP verified successfully! you can now reset your password.",

@@ -1,7 +1,7 @@
 import { FaDownload, FaTrash } from "react-icons/fa";
 import type { IThumbnail } from "../data/dataAssets";
 import { FaArrowUpRightFromSquare } from "react-icons/fa6";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 const ThumbnailCard = ({
   thumbnail,
@@ -15,8 +15,8 @@ const ThumbnailCard = ({
     console.log("Delete thumbnail with ID:", id);
   };
 
-  const handleDownload = (image_url: string) => {
-    window.open(image_url, "_blank");
+  const handleDownload = (imageUrl: string) => {
+    window.open(imageUrl, "_blank");
   };
 
   return (
@@ -26,7 +26,7 @@ const ThumbnailCard = ({
       >
         <img
           className="object-cover rounded-t-2xl group-hover:scale-105 transition-transform duration-300"
-          src={thumbnail.image_url}
+          src={thumbnail.imageUrl}
           alt={thumbnail.title}
         />
       </div>
@@ -39,10 +39,10 @@ const ThumbnailCard = ({
             {thumbnail.style}
           </span>
           <span className="px-2 py-0.5 rounded-md bg-white/10 ">
-            {thumbnail.color_scheme}
+            {thumbnail.colorScheme}
           </span>
           <span className="px-2 py-0.5 rounded-md bg-white/10 ">
-            {thumbnail.aspect_ratio}
+            {thumbnail.aspectRatio}
           </span>
         </div>
         <div className="flex justify-between items-center">
@@ -56,12 +56,12 @@ const ThumbnailCard = ({
             <button onClick={() => handleDelete(thumbnail._id)}>
               <FaTrash className="text-white hover:text-orange-600" />
             </button>
-            <button onClick={() => handleDownload(thumbnail.image_url!)}>
+            <button onClick={() => handleDownload(thumbnail.imageUrl!)}>
               <FaDownload className="text-white hover:text-orange-600" />
             </button>
             <Link
               target="_blank"
-              to={`/preview?title=${thumbnail.title}&thumbnail_url=${thumbnail.image_url}`}
+              to={`/preview?title=${thumbnail.title}&thumbnail_url=${thumbnail.imageUrl}`}
             >
               <FaArrowUpRightFromSquare className="text-white hover:text-orange-600" />
             </Link>

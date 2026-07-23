@@ -19,7 +19,7 @@ import { unShiftThumbnail } from "../utils/thumbnailListSlice";
 const Generate = () => {
   const { thumbId } = useParams<string>();
   const user = useSelector((store: IStore) => store.user);
-  const thumbnailList = useSelector((store: IStore) => store.thumbnailList);
+  const thumbnailList = useSelector((store: IStore) => store.thumbnailList.items);
 
   const curThumbnail = useMemo(
     () => thumbnailList.find((t) => t._id === thumbId),

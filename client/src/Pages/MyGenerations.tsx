@@ -10,20 +10,26 @@ import api from "../configs/api";
 import { pushThumbnail } from "../utils/thumbnailListSlice";
 
 const MyGenerations = () => {
+  const user = useSelector((store: IStore) => store.user);
+
+  const {
+    items: thumbnailList,
+    page,
+    hasMore,
+  } = useSelector((store: IStore) => store.thumbnailList);
+
+  const [loading, setLoading] = useState<boolean>(false);
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const user = useSelector((store: IStore) => store.user);
-  const thumbnailList = useSelector((store: IStore) => store.thumbnailList);
   const { showToast } = useToast();
-  const [loading, setLoading] = useState(false);
-  const [page, setPage] = useState(1);
-  const [hasMore, setHasMore] = useState(true);
+
   const observerRef = useRef<HTMLDivElement | null>(null);
   const fetchingRef = useRef(false);
 
-  useEffect(() => {
-    if (!user) navigate("/login");
-  }, [user, navigate]);
+  if (!user) {
+    navigate("/login");
+  }
 
   const AspectRatioClass: Record<IAspectRatio, string> = {
     "16:9": "aspect-video",
@@ -33,13 +39,16 @@ const MyGenerations = () => {
 
   const fetchThumbnails = useCallback(async () => {
     if (fetchingRef.current || !hasMore) return;
-    fetchingRef.current = true;
     try {
+      fetchingRef.current = true;
       setLoading(true);
       const { data } = await api.get(`/user/thumbnails?page=${page}&limit=15`);
-      dispatch(pushThumbnail(data.data));
-      setHasMore(data.hasMore);
-      setPage((prev) => prev + 1);
+      console.log("Fetched thumbnails:", data);
+      const curList = {
+        data: data.data,
+        hasMore: data.hasMore,
+      };
+      dispatch(pushThumbnail(curList));
     } catch (error) {
       console.error(error);
       showToast("error", "Failed to load thumbnails. Please try again.");
@@ -47,24 +56,28 @@ const MyGenerations = () => {
       setLoading(false);
       fetchingRef.current = false;
     }
-  }, [page, hasMore]);
+  }, [hasMore, page, dispatch, showToast]);
 
   useEffect(() => {
-    fetchThumbnails();
+    if (thumbnailList.length === 0) fetchThumbnails();
   }, []);
 
   useEffect(() => {
-    if (!observerRef.current) return;
+    const target = observerRef.current;
+    if (!target) return;
     const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries[0].isIntersecting && hasMore) {
+      ([entry]) => {
+        if (entry.isIntersecting && hasMore) {
           fetchThumbnails();
         }
       },
-      { threshold: 0.5 },
+      {
+        rootMargin: "200px",
+        threshold: 0,
+      },
     );
 
-    observer.observe(observerRef.current);
+    observer.observe(target);
 
     return () => observer.disconnect();
   }, [fetchThumbnails, hasMore]);
@@ -103,7 +116,7 @@ const MyGenerations = () => {
           </div>
         )}
 
-        {!loading && thumbnailList.length > 0 && (
+        {thumbnailList.length > 0 && (
           <div className=" grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {thumbnailList.map((thumb: IThumbnail) => (
               <div

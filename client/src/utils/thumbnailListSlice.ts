@@ -1,18 +1,39 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { IThumbnail } from "../data/dataAssets";
 
+const initialState = {
+  items: [] as IThumbnail[],
+  page: 1,
+  hasMore: true,
+};
+
 const thumbnailListSlice = createSlice({
   name: "thumbnailList",
-  initialState: [] as IThumbnail[],
+  initialState,
   reducers: {
     unShiftThumbnail: (state, action) => {
-      state.unshift(action.payload);
+      state.items.unshift(action.payload);
     },
+
     pushThumbnail: (state, action) => {
-      state.push(...action.payload);
+      const incoming: IThumbnail[] = action.payload.data;
+
+      incoming.forEach((thumbnail) => {
+        if (!state.items.some((item) => item._id === thumbnail._id))
+          state.items.push(thumbnail);
+      });
+
+      state.page += 1;
+      state.hasMore = action.payload.hasMore;
+    },
+
+    resetThumbnailList: (state) => {
+      state.items = [];
+      state.hasMore = true;
+      state.page = 1;
     },
   },
 });
 
-export const { unShiftThumbnail, pushThumbnail } = thumbnailListSlice.actions;
+export const { unShiftThumbnail, pushThumbnail, resetThumbnailList } = thumbnailListSlice.actions;
 export default thumbnailListSlice.reducer;

@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import api from "../configs/api";
 import { removeUser } from "../utils/userSlice";
 import useToast from "../hooks/useToast";
+import { resetThumbnailList } from "../utils/thumbnailListSlice";
 
 export default function Navbar() {
   const navigate = useNavigate();
@@ -21,9 +22,9 @@ export default function Navbar() {
   const handleLogout = async () => {
     try {
       const { data } = await api.post("/logout");
-      dispatch(removeUser());
       showToast("success", data.message);
-
+      dispatch(removeUser());
+      dispatch(resetThumbnailList());
       setIsMenuOpen(false);
       navigate("/login");
     } catch (error) {

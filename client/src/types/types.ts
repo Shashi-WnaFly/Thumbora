@@ -52,10 +52,16 @@ export interface IFooter {
   links: ILink[];
 }
 
+export interface IThumbnailList {
+  items: IThumbnail[],
+  hasMore: boolean,
+  page: number,
+}
+
 export interface IStore {
   user: object;
   toast: IToast[];
-  thumbnailList: IThumbnail[];
+  thumbnailList: IThumbnailList;
 }
 
 export interface IToast {

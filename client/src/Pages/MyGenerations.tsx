@@ -26,10 +26,12 @@ const MyGenerations = () => {
 
   const observerRef = useRef<HTMLDivElement | null>(null);
   const fetchingRef = useRef(false);
-
-  if (!user) {
-    navigate("/login");
-  }
+  
+  useEffect(() => {
+    if (!user) {
+      navigate("/login");
+    }
+  }, [user, navigate]);
 
   const AspectRatioClass: Record<IAspectRatio, string> = {
     "16:9": "aspect-video",
@@ -39,15 +41,18 @@ const MyGenerations = () => {
 
   const fetchThumbnails = useCallback(async () => {
     if (fetchingRef.current || !hasMore) return;
+
+    fetchingRef.current = true;
+    setLoading(true);
+
     try {
-      fetchingRef.current = true;
-      setLoading(true);
       const { data } = await api.get(`/user/thumbnails?page=${page}&limit=15`);
-      console.log("Fetched thumbnails:", data);
+
       const curList = {
         data: data.data,
         hasMore: data.hasMore,
       };
+
       dispatch(pushThumbnail(curList));
     } catch (error) {
       console.error(error);

@@ -35,7 +35,6 @@ export default function Navbar() {
   useEffect(() => {
     const closeMenu = async () => {
       setIsMenuOpen(false);
-      console.log("Menu closed");
     };
 
     closeMenu();

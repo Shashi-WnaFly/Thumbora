@@ -9,13 +9,15 @@ import {
   useLocation,
 } from "react-router-dom";
 import Login from "./Pages/Login";
-import MyGenerations from "./Pages/MyGenerations";
 import YTPreview from "./Pages/YTPreview";
-import { useEffect } from "react";
+import { lazy, Suspense, useEffect } from "react";
 import appStore from "./utils/appStore";
 import { Provider } from "react-redux";
 import PasswordReset from "./Pages/PasswordReset";
 import PasswordUpdate from "./Pages/PasswordUpdate";
+import LoadingMyGen from "./components/LoadingMyGen";
+
+const MyGenerations = lazy(() => import("./Pages/MyGenerations"));
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -48,7 +50,11 @@ const router = createBrowserRouter([
           },
           {
             path: "/my-generations",
-            element: <MyGenerations />,
+            element: (
+              <Suspense fallback={<LoadingMyGen />}>
+                <MyGenerations />
+              </Suspense>
+            ),
           },
           {
             path: "/password/update",

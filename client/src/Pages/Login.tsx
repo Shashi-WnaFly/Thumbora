@@ -15,8 +15,8 @@ const Login = () => {
 
   const [formData, setFormData] = useState({
     name: "",
-    email: "",
-    password: "",
+    email: "shashi123@gmail.com",
+    password: "Shashi@123",
   });
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;

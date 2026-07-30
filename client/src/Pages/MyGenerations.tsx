@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import type { IStore } from "../types/types";
 import api from "../configs/api";
 import { pushThumbnail } from "../utils/thumbnailListSlice";
+import LoadingMyGen from "../components/LoadingMyGen";
 
 const MyGenerations = () => {
   const user = useSelector((store: IStore) => store.user);
@@ -26,7 +27,7 @@ const MyGenerations = () => {
 
   const observerRef = useRef<HTMLDivElement | null>(null);
   const fetchingRef = useRef(false);
-  
+
   useEffect(() => {
     if (!user) {
       navigate("/login");
@@ -47,7 +48,7 @@ const MyGenerations = () => {
 
     try {
       const { data } = await api.get(`/user/thumbnails?page=${page}&limit=15`);
-
+      console.log("Fetched thumbnails:", data);
       const curList = {
         data: data.data,
         hasMore: data.hasMore,
@@ -98,16 +99,7 @@ const MyGenerations = () => {
             View or manage your AI-generated thumbnails
           </p>
         </div>
-        {loading && (
-          <div className=" mt-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {[...Array(9)].map((_, i) => (
-              <div
-                key={i}
-                className="animate-pulse bg-white/8 border-white/12 rounded-2xl p-4 h-52"
-              />
-            ))}
-          </div>
-        )}
+        {loading && <LoadingMyGen />}
 
         {!loading && thumbnailList.length < 1 && (
           <div className="mt-12 flex flex-col items-center gap-4">

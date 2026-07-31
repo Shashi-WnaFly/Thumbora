@@ -24,7 +24,7 @@ const StyleSelector = ({
   const styleDescriptions: Record<IThumbnailStyle, string> = {
     "Bold & Graphic": "High contrast, bold typography, striking visuals",
     Minimalistic: "Clean design, ample white space, simple typography",
-    Realistic: "Photo-realistic images, natural colors, detailed textures",
+    Photorealistic: "Photo-realistic images, natural colors, detailed textures",
     Illustrated: "Hand-drawn, vibrant colors, artistic, creative",
     "Tech/Futuristic": "Sleek design, Modern, tech-inspired visuals",
   };
@@ -32,7 +32,7 @@ const StyleSelector = ({
   const styleIcons: Record<IThumbnailStyle, React.ReactNode> = {
     "Bold & Graphic": <LuSparkle className="w-5 h-5 text-orange-500" />,
     Minimalistic: <LuSquare className="w-5 h-5 text-orange-500" />,
-    Realistic: <LuImage className="w-5 h-5 text-orange-500" />,
+    Photorealistic: <LuImage className="w-5 h-5 text-orange-500" />,
     Illustrated: <LuPenTool className="w-5 h-5 text-orange-500" />,
     "Tech/Futuristic": <LuCpu className="w-5 h-5 text-orange-500" />,
   };

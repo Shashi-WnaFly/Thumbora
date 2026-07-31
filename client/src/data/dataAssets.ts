@@ -6,7 +6,7 @@ export type IAspectRatio = (typeof AspectRatios)[number];
 export const ThumbnailStyles = [
   "Bold & Graphic",
   "Minimalistic",
-  "Realistic",
+  "Photorealistic",
   "Illustrated",
   "Tech/Futuristic",
 ] as const;

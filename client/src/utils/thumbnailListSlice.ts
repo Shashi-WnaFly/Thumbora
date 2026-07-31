@@ -32,8 +32,13 @@ const thumbnailListSlice = createSlice({
       state.hasMore = true;
       state.page = 1;
     },
+
+    deleteThumbnail: (state, action) => {
+      const id = action.payload;
+      state.items = state.items.filter((thumbnail: IThumbnail) => thumbnail._id !== id);
+    }
   },
 });
 
-export const { unShiftThumbnail, pushThumbnail, resetThumbnailList } = thumbnailListSlice.actions;
+export const { unShiftThumbnail, pushThumbnail, resetThumbnailList, deleteThumbnail } = thumbnailListSlice.actions;
 export default thumbnailListSlice.reducer;

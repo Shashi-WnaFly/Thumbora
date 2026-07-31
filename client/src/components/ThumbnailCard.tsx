@@ -2,6 +2,11 @@ import { FaDownload, FaTrash } from "react-icons/fa";
 import type { IThumbnail } from "../data/dataAssets";
 import { FaArrowUpRightFromSquare } from "react-icons/fa6";
 import { Link } from "react-router-dom";
+import api from "../configs/api";
+import { useDispatch } from "react-redux";
+import { deleteThumbnail } from "../utils/thumbnailListSlice";
+import useToast from "../hooks/useToast";
+import axios from "axios";
 
 const ThumbnailCard = ({
   thumbnail,
@@ -10,9 +15,25 @@ const ThumbnailCard = ({
   thumbnail: IThumbnail;
   aspectRatio: string;
 }) => {
-  const handleDelete = (id: string) => {
-    // Implement delete functionality here
-    console.log("Delete thumbnail with ID:", id);
+  const dispatch = useDispatch();
+  const { showToast } = useToast();
+  const handleDelete = async (id: string) => {
+    try {
+      const { data } = await api.delete(`/user/thumbnail/delete/${id}`);
+      dispatch(deleteThumbnail(id));
+      showToast("success", data.message);
+    } catch (error) {
+      console.error(error);
+
+      if (axios.isAxiosError(error)) {
+        const message =
+          error.response?.data?.message ||
+          "Something went wrong. Please try again.";
+        showToast("warning", message);
+      } else {
+        showToast("error", "Unexpected error occurred.");
+      }
+    }
   };
 
   const handleDownload = (imageUrl: string) => {
@@ -60,7 +81,7 @@ const ThumbnailCard = ({
               <FaDownload className="text-white hover:text-orange-600" />
             </button>
             <Link
-              target="_blank"
+              // target="_blank"
               to={`/preview?title=${thumbnail.title}&thumbnail_url=${thumbnail.imageUrl}`}
             >
               <FaArrowUpRightFromSquare className="text-white hover:text-orange-600" />

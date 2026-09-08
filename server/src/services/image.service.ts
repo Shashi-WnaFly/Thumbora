@@ -3,7 +3,7 @@ import { IAspectRatio } from "../types/types.js";
 
 export const generateImage = async (aspectRatio: IAspectRatio, prompt: string) => {
   const response = await together.images.generate({
-    model: "black-forest-labs/FLUX.1-schnell",
+    model: "black-forest-labs/FLUX.2-dev",
     prompt,
     aspect_ratio: aspectRatio || "16:9",
     steps: 4,

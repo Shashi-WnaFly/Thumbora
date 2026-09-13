@@ -156,7 +156,13 @@ const Login = () => {
 
           {state === "login" && (
             <div className="mt-4 text-left">
-              <button onClick={() => navigate("/user/password/reset")} className="text-sm text-orange-400 hover:underline">
+              <button
+                onClick={(e) => {
+                  e.preventDefault(); // prevent form submission
+                  navigate("/user/password/reset");
+                }}
+                className="text-sm text-orange-400 hover:underline"
+              >
                 Forget password?
               </button>
             </div>

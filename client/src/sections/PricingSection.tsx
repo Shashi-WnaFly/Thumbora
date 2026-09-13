@@ -1,4 +1,3 @@
-import React from "react";
 import SectionTitle from "../components/SectionTitle";
 import { pricingData } from "../data/pricing";
 import type { IPricing } from "../types/types";

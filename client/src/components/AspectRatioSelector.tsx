@@ -1,19 +1,24 @@
 import React from "react";
-import { AspectRatios, type AspectRatio } from "../data/dataAssets";
+import { AspectRatios, type IAspectRatio } from "../data/dataAssets";
 import { RiRectangleLine, RiSquareLine } from "react-icons/ri";
 
 const ratioIcons = {
   "16:9": <RiRectangleLine className="size-6" />,
   "1:1": <RiSquareLine className="size-6" />,
-  "9:16": <RiRectangleLine className="size-6" style={{ transform: "rotate(90deg)" }} />,
-} as Record<AspectRatio, React.ReactNode>;
+  "9:16": (
+    <RiRectangleLine
+      className="size-6"
+      style={{ transform: "rotate(90deg)" }}
+    />
+  ),
+} as Record<IAspectRatio, React.ReactNode>;
 
 const AspectRatioSelector = ({
   value,
   onChange,
 }: {
-  value: AspectRatio;
-  onChange: (ratio: AspectRatio) => void;
+  value: IAspectRatio;
+  onChange: (ratio: IAspectRatio) => void;
 }) => {
   return (
     <div className="flex flex-col gap-2">

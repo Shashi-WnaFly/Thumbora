@@ -29,7 +29,7 @@ const Login = () => {
       const { name, email, password } = formData;
       if (state === "signup") {
         if (!signUpValidation(name, email, password, showToast)) return;
-        const { data } = await api.post("/signup", {
+        const { data } = await api.post("/auth/signup", {
           userName: name,
           password,
           emailId: email,
@@ -40,7 +40,7 @@ const Login = () => {
         navigate("/");
       } else {
         if (!loginValidation(email, password, showToast)) return;
-        const { data } = await api.post("/login", {
+        const { data } = await api.post("/auth/login", {
           emailId: email,
           password,
         });

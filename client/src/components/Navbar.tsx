@@ -21,7 +21,7 @@ export default function Navbar() {
 
   const handleLogout = async () => {
     try {
-      const { data } = await api.post("/logout");
+      const { data } = await api.post("/auth/logout");
       showToast("success", data.message);
       dispatch(removeUser());
       dispatch(resetThumbnailList());

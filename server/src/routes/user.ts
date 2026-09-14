@@ -15,7 +15,7 @@ cloudinary.config({
 const router = express.Router();
 
 router.post(
-  "/user/generate/thumbnail",
+  "/api/user/generate/thumbnail",
   userAuth,
   async (req: Request, res: Response) => {
     let thumbnail: any = null;
@@ -101,7 +101,7 @@ router.post(
 );
 
 router.get(
-  "/user/thumbnails",
+  "/api/user/thumbnails",
   userAuth,
   async (req: Request, res: Response) => {
     try {
@@ -136,7 +136,7 @@ router.get(
 );
 
 router.delete(
-  "/user/thumbnail/delete/:thumbId",
+  "/api/user/thumbnail/delete/:thumbId",
   userAuth,
   async (req: Request, res: Response) => {
     try {

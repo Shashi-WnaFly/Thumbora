@@ -1,8 +1,8 @@
 import "dotenv/config";
 import express from "express";
-import cors from "cors";
 import cookieParser from "cookie-parser";
 import connectDB from "./config/database.js";
+import cors from "cors";
 
 const app = express();
 
@@ -19,7 +19,7 @@ import authRoutes from "./routes/auth.js";
 import userProfile from "./routes/profile.js";
 import userThumbnail from "./routes/user.js";
 import resetRoutes from "./routes/reset.js";
-import paymentRoutes from "./routes/payment.js"
+import paymentRoutes from "./routes/payment.js";
 
 app.use("/", authRoutes);
 app.use("/", userProfile);

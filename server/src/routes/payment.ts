@@ -9,7 +9,7 @@ import User from "../models/User.js";
 const router = express.Router();
 
 router.post(
-  "/payment/create/order",
+  "/api/payment/create/order",
   userAuth,
   async (req: Request, res: Response) => {
     try {
@@ -55,7 +55,7 @@ router.post(
   },
 );
 
-router.post("/payment/webhook", async (req: Request, res: Response) => {
+router.post("/api/payment/webhook", async (req: Request, res: Response) => {
   try {
     const webhookSignature = req.get("X-Razorpay-Signature");
 

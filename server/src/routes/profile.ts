@@ -7,7 +7,7 @@ import { safeUser } from "../utils/common.js";
 
 const router = express.Router();
 
-router.get("/profile/view", userAuth, (req: Request, res: Response) => {
+router.get("/api/profile/view", userAuth, (req: Request, res: Response) => {
   try {
     res.json({ success: true, data: safeUser(req.user) });
   } catch (error) {
@@ -15,7 +15,7 @@ router.get("/profile/view", userAuth, (req: Request, res: Response) => {
   }
 });
 
-router.patch("/profile/edit", userAuth, async (req: Request, res: Response) => {
+router.patch("/api/profile/edit", userAuth, async (req: Request, res: Response) => {
   try {
     const loggedUser = req.user;
     const isEditAllowed = Object.keys(req.body).every((field) =>
@@ -38,7 +38,7 @@ router.patch("/profile/edit", userAuth, async (req: Request, res: Response) => {
 });
 
 router.patch(
-  "/profile/password/change",
+  "/api/profile/password/change",
   userAuth,
   async (req: Request, res: Response) => {
     try {

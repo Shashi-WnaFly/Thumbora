@@ -7,7 +7,7 @@ import { safeUser } from "../utils/common.js";
 
 const router = express.Router();
 
-router.post("/signup", async (req: Request, res: Response) => {
+router.post("/api/auth/signup", async (req: Request, res: Response) => {
   try {
     const { userName, password, emailId } = req.body;
     const normalizedPassword = password ? password.trim() : "";
@@ -42,7 +42,7 @@ router.post("/signup", async (req: Request, res: Response) => {
   }
 });
 
-router.post("/login", async (req: Request, res: Response) => {
+router.post("/api/auth/login", async (req: Request, res: Response) => {
   try {
     const { emailId, password } = req.body;
     const normalizedEmailId = emailId ? emailId.trim().toLowerCase() : "";
@@ -92,7 +92,7 @@ router.post("/login", async (req: Request, res: Response) => {
   }
 });
 
-router.post("/logout", (req: Request, res: Response) => {
+router.post("/api/auth/logout", (req: Request, res: Response) => {
   try {
     res.cookie("token", null, { expires: new Date(Date.now()) });
     res.json({ success: true, message: "Logout successful." });

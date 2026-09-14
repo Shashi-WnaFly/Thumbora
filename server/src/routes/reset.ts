@@ -14,7 +14,7 @@ import redis from "../config/redis.js";
 
 const router = express.Router();
 
-router.post("/reset/verify/email", async (req: Request, res: Response) => {
+router.post("/api/reset/verify/email", async (req: Request, res: Response) => {
   try {
     const { emailId } = req.body;
     const normalizedEmail = emailId ? emailId.trim().toLowerCase() : null;
@@ -91,7 +91,7 @@ router.post("/reset/verify/email", async (req: Request, res: Response) => {
   }
 });
 
-router.post("/reset/verify/otp", async (req: Request, res: Response) => {
+router.post("/api/reset/verify/otp", async (req: Request, res: Response) => {
   try {
     const { emailId, otp } = req.body;
 
@@ -183,7 +183,7 @@ router.post("/reset/verify/otp", async (req: Request, res: Response) => {
   }
 });
 
-router.post("/reset/update/password", async (req: Request, res: Response) => {
+router.post("/api/reset/update/password", async (req: Request, res: Response) => {
   try {
     const { resetToken, newPassword, confirmPassword } = req.body;
 

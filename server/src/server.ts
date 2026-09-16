@@ -34,7 +34,7 @@ app.use("/", userThumbnail);
 app.use("/", resetRoutes);
 app.use("/", paymentRoutes);
 
-// const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5000;
 
 connectDB()
   .then(() => {

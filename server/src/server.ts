@@ -8,7 +8,7 @@ const app = express();
 
 app.use(
   cors({
-    origin: "https://miraculous-insight-production-ce9e.up.railway.app",
+    origin: "http://localhost:5173",
     credentials: true,
   }),
 );
@@ -21,7 +21,7 @@ import userThumbnail from "./routes/user.js";
 import resetRoutes from "./routes/reset.js";
 import paymentRoutes from "./routes/payment.js";
 
-app.use("/ping", (req: Request, res: Response) => {
+app.get("/ping", (_req: Request, res: Response) => {
   return res.status(200).json({
     data: "pong",
     success: true,

@@ -8,7 +8,7 @@ const app = express();
 
 app.use(
   cors({
-    origin: "https://miraculous-insight-production-db4e.up.railway.app",
+    origin: "https://miraculous-insight-production-ce9e.up.railway.app",
     credentials: true,
   }),
 );

@@ -34,13 +34,11 @@ app.use("/", userThumbnail);
 app.use("/", resetRoutes);
 app.use("/", paymentRoutes);
 
-const PORT = process.env.PORT || 5000;
-
 connectDB()
   .then(() => {
     console.log("database is successfully connected.");
-    app.listen("0.0.0.0", () => {
-      console.log(`Server is running on http://localhost:${PORT}`);
+    app.listen(8080, () => {
+      console.log(`Server is running on http://localhost:8080`);
     });
   })
   .catch(() => {

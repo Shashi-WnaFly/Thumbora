@@ -32,6 +32,9 @@ router.post("/api/auth/signup", async (req: Request, res: Response) => {
     const token = await signUpUser.getJWT();
 
     res.cookie("token", token, {
+      httpOnly: process.env.production === "production",
+      secure: true,
+      sameSite: "none",
       expires: new Date(Date.now() + 24 * 60 * 60 * 1000),
     });
 
@@ -83,6 +86,9 @@ router.post("/api/auth/login", async (req: Request, res: Response) => {
     const token = await loggedUser.getJWT();
 
     res.cookie("token", token, {
+      httpOnly: process.env.production === "production",
+      secure: true,
+      sameSite: "none",
       expires: new Date(Date.now() + 24 * 60 * 60 * 1000),
     });
     req.user = loggedUser;
@@ -94,7 +100,12 @@ router.post("/api/auth/login", async (req: Request, res: Response) => {
 
 router.post("/api/auth/logout", (req: Request, res: Response) => {
   try {
-    res.cookie("token", null, { expires: new Date(Date.now()) });
+    res.cookie("token", null, {
+      httpOnly: process.env.production === "production",
+      secure: true,
+      sameSite: "none",
+      expires: new Date(Date.now()),
+    });
     res.json({ success: true, message: "Logout successful." });
   } catch (error) {
     res.json({ success: false, message: (error as Error).message });

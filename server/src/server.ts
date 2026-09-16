@@ -1,5 +1,5 @@
 import "dotenv/config";
-import express from "express";
+import express, { Request, Response } from "express";
 import cookieParser from "cookie-parser";
 import connectDB from "./config/database.js";
 import cors from "cors";
@@ -21,13 +21,20 @@ import userThumbnail from "./routes/user.js";
 import resetRoutes from "./routes/reset.js";
 import paymentRoutes from "./routes/payment.js";
 
+app.use("/ping", (req: Request, res: Response) => {
+  return res.status(200).json({
+    data: "pong",
+    success: true,
+  });
+});
+
 app.use("/", authRoutes);
 app.use("/", userProfile);
 app.use("/", userThumbnail);
 app.use("/", resetRoutes);
 app.use("/", paymentRoutes);
 
-const PORT = process.env.PORT || 5000;
+// const PORT = process.env.PORT || 5000;
 
 connectDB()
   .then(() => {

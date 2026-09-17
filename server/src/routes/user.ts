@@ -54,8 +54,6 @@ router.post(
 
       const imageUrl = await generateImage(aspectRatio, prompt);
 
-      console.log(imageUrl);
-
       const response = await fetch(imageUrl!);
 
       const imageBuffer = Buffer.from(await response.arrayBuffer());
@@ -73,8 +71,6 @@ router.post(
         );
         stream.end(imageBuffer);
       });
-
-      console.log(uploadRes);
 
       thumbnail.promptUsed = prompt;
       thumbnail.imageUrl = uploadRes.secure_url;

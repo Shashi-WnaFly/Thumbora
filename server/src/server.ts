@@ -8,7 +8,7 @@ const app = express();
 
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: "humorous-charm-production-3b25.up.railway.app",
     credentials: true,
   }),
 );
@@ -34,11 +34,13 @@ app.use("/", userThumbnail);
 app.use("/", resetRoutes);
 app.use("/", paymentRoutes);
 
+const PORT = process.env.PORT || 5000;
+
 connectDB()
   .then(() => {
     console.log("database is successfully connected.");
-    app.listen(8080, () => {
-      console.log(`Server is running on http://localhost:8080`);
+    app.listen(PORT, () => {
+      console.log(`Server is running on http://localhost:${PORT}`);
     });
   })
   .catch(() => {

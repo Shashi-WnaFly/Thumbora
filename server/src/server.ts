@@ -8,7 +8,7 @@ const app = express();
 
 app.use(
   cors({
-    origin: "humorous-charm-production-3b25.up.railway.app",
+    origin: "https://humorous-charm-production-3b25.up.railway.app",
     credentials: true,
   }),
 );

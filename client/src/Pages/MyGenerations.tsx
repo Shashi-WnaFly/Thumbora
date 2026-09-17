@@ -48,7 +48,7 @@ const MyGenerations = () => {
 
     try {
       const { data } = await api.get(`/user/thumbnails?page=${page}&limit=15`);
-      console.log("Fetched thumbnails:", data);
+      
       const curList = {
         data: data.data,
         hasMore: data.hasMore,
